@@ -1,61 +1,71 @@
-import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo'
-import { Link } from 'expo-router'
-import { useState, useRef } from 'react';
-import { Text, View, Image, ScrollView, TouchableOpacity, SafeAreaView, useWindowDimensions } from 'react-native'
-import { SignOutButton } from '@/components/SignOutButton'
-// import { useTransactions } from '../../hooks/useTransactions';
-// import { useEffect } from 'react';
-// import PageLoader from "../../components/PageLoader";
+import { useEffect, useState, useRef } from 'react';
+import { Text, View, Image, ScrollView, TouchableOpacity, SafeAreaView, useWindowDimensions } from 'react-native';
 import { styles } from '../../assets/styles/home.styles.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwt_decode from 'jwt-decode';
+import { useRouter } from 'expo-router';
 
 export default function Page() {
-  const { user } = useUser();
-  const { width } = useWindowDimensions()
+  const router = useRouter();
+  const { width } = useWindowDimensions();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [email, setEmail] = useState(null);
+  const [username, setUsername] = useState('');
   const scrollRef = useRef(null);
 
   const banners = [
-  require('@/assets/images/banner1.png'),
-  require('@/assets/images/banner1.png'),
-  // tambahkan lagi kalau ada lebih banyak
+    require('@/assets/images/banner1.png'),
+    require('@/assets/images/banner1.png'),
   ];
 
   const handleScroll = (event) => {
     const slide = Math.round(
       event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width
-    )
-    setCurrentIndex(slide)
-  }
-  // const { transactions, summary, isLoading, loadData } = useTransactions(user.id);
+    );
+    setCurrentIndex(slide);
+  };
 
+  const loadUser = async () => {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      router.replace('/(auth)/sign-in');
+      return;
+    }
 
-  // useEffect(() => {
-  //   loadData();
-  // }, [loadData]);
+    try {
+      const decoded = jwt_decode(token);
+      setEmail(decoded.email || 'User');
+    } catch (err) {
+      console.error('Failed to decode token', err);
+      setEmail('User');
+    }
+  };
 
-  // console.log("userId", user.id);
-  // console.log("transactions:", transactions);
-  // console.log("summary:", summary);
+  const handleSignOut = async () => {
+    await AsyncStorage.removeItem('token');
+    router.replace('/(auth)/sign-in');
+  };
 
-  // if(isLoading) return <PageLoader />
+  useEffect(() => {
+    loadUser();
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <SignedIn>
+      {email ? (
         <ScrollView style={styles.containerHome}>
-          {/* Header: user dan sign out */}
-
-          {/* Logo */}
+          {/* Header */}
           <View style={styles.headerRow}>
             <Image source={require('@/assets/images/Logo-mahao.png')} style={styles.logoSmall} resizeMode="contain" />
             <View style={styles.headerRightColumn}>
-            <Text style={styles.welcome}>Welcome, {user?.emailAddresses[0]?.emailAddress}</Text>
-          <SignOutButton />
+              <Text style={styles.welcome}>Welcome, {username}</Text>
+              <TouchableOpacity onPress={handleSignOut}>
+                <Text style={{ color: 'red' }}>Sign Out</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
 
-
-          {/* Banner dengan indikator */}
+          {/* Banner */}
           <View>
             <ScrollView
               ref={scrollRef}
@@ -75,7 +85,6 @@ export default function Page() {
               ))}
             </ScrollView>
 
-            {/* Dot indicator */}
             <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5, marginBottom: 5 }}>
               {banners.map((_, index) => (
                 <View
@@ -85,7 +94,7 @@ export default function Page() {
                     width: 10,
                     borderRadius: 5,
                     marginHorizontal: 5,
-                    backgroundColor: currentIndex === index ? '#0d1b2a' : '#a0aec0'
+                    backgroundColor: currentIndex === index ? '#0d1b2a' : '#a0aec0',
                   }}
                 />
               ))}
@@ -99,25 +108,18 @@ export default function Page() {
           <MenuItem image={require('@/assets/images/chatBot.png')} title="Chatbot" />
           <MenuItem image={require('@/assets/images/nutrition.png')} title="Nutrition" />
         </ScrollView>
-      </SignedIn>
-
-      <SignedOut>
-        <Link href="/(auth)/sign-in">
-          <Text>Sign in</Text>
-        </Link>
-        <Link href="/(auth)/sign-up">
-          <Text>Sign up</Text>
-        </Link>
-      </SignedOut>
+      ) : (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>Loading...</Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
 
-  const MenuItem = ({ image, title }) => (
+const MenuItem = ({ image, title }) => (
   <TouchableOpacity style={styles.menuItem}>
     <Image source={image} style={styles.menuImage} />
     <Text style={styles.menuTitle}>{title}</Text>
   </TouchableOpacity>
 );
-  
-

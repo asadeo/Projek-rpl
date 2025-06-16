@@ -1,22 +1,18 @@
 import SafeScreen from "../components/SafeScreen";
-import { View, Text } from "react-native";
-import { ClerkProvider } from '@clerk/clerk-expo';
-import { usePathname, Slot, Redirect } from 'expo-router';
-import { tokenCache } from '@clerk/clerk-expo/token-cache';
-import { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Slot, Redirect, usePathname } from "expo-router";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import PageLoader from "../components/PageLoader";
 
 export default function RootLayout() {
-
   const [loading, setLoading] = useState(true);
-  const pathname = usePathname();
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(true);
+  const pathname = usePathname();
 
   useEffect(() => {
     const checkOnboarding = async () => {
-      const seen = await AsyncStorage.getItem('hasSeenOnboarding');
-          console.log('HAS SEEN ONBOARDING:', seen);
+      const seen = await AsyncStorage.getItem("hasSeenOnboarding");
+      console.log("HAS SEEN ONBOARDING:", seen);
       setHasSeenOnboarding(seen === "true");
       setLoading(false);
     };
@@ -24,21 +20,16 @@ export default function RootLayout() {
   }, []);
 
   if (loading) {
-    return (
-      <PageLoader />
-    );
+    return <PageLoader />;
   }
 
-
-  if (!hasSeenOnboarding && pathname === '/') {
+  if (!hasSeenOnboarding && pathname === "/") {
     return <Redirect href="/onboarding" />;
   }
 
   return (
-    <ClerkProvider tokenCache={tokenCache}>
-      <SafeScreen>
-        <Slot />
-      </SafeScreen>
-    </ClerkProvider>
+    <SafeScreen>
+      <Slot />
+    </SafeScreen>
   );
 }

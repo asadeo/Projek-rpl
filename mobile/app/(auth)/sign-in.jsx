@@ -1,5 +1,3 @@
-import * as React from 'react'
-import { useSignIn } from '@clerk/clerk-expo'
 import { Link, useRouter } from 'expo-router'
 import { Text, TextInput, TouchableOpacity, View, Image, BackHandler } from 'react-native'
 import { useState } from 'react'
@@ -10,7 +8,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useFocusEffect } from '@react-navigation/native';
 
 export default function Page() {
-  const { signIn, setActive, isLoaded } = useSignIn()
   const router = useRouter()
 
   const [emailAddress, setEmailAddress] = useState('')
@@ -26,44 +23,44 @@ export default function Page() {
     //   }, [])
     // );
 
-  // Handle the submission of the sign-in form
-  const onSignInPress = async () => {
-    if (!isLoaded) return
-
-    if (!emailAddress || !password) {
-      setError("Please fill in all fields.");
-      return;
-    }
-
-    setLoading(true)
-
-    // Start the sign-in process using the email and password provided
-    try {
-      const signInAttempt = await signIn.create({
-        identifier: emailAddress,
-        password,
-      })
-
-      // If sign-in process is complete, set the created session as active
-      // and redirect the user
-      if (signInAttempt.status === 'complete') {
-        await setActive({ session: signInAttempt.createdSessionId })
-        router.replace('/')
-      } else {
-        // If the status isn't complete, check why. User might need to
-        // complete further steps.
-        console.error(JSON.stringify(signInAttempt, null, 2))
-      }
-    } catch (err) {
-      if (err.errors?.[0]?.code === "form_password_incorrect"){
-        setError("Password is incorrect, Please try again.");
-      } else {
-        setError("An error occurred. Please try again");
-      } 
-    } finally {
-      setLoading(false)
-    }
+const onSignInPress = async () => {
+  if (!emailAddress || !password) {
+    setError("Please fill in all fields.");
+    return;
   }
+
+  setLoading(true);
+
+  try {
+    const response = await fetch("http://192.168.1.104:3000/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: emailAddress,
+        password: password
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Login gagal");
+    }
+
+    // Simpan token ke local storage
+    await AsyncStorage.setItem("token", data.token);
+    await AsyncStorage.setItem("user_id", data.user_id.toString());
+    await AsyncStorage.setItem("role", data.role);
+
+    router.replace("/"); // Redirect ke halaman utama
+  } catch (err) {
+    setError(err.message || "Terjadi kesalahan");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <KeyboardAwareScrollView 

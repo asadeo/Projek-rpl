@@ -1,4 +1,5 @@
 //routes/auth.js
+require('dotenv').config();
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const pool = require('../db'); // Menggunakan 'pool' secara konsisten
@@ -12,18 +13,39 @@ router.use(express.json());
 
 // Register
 router.post('/register', async (req, res) => {
-    try {
-        const { name, email, password } = req.body;
-        // TODO: Implement password hashing with bcrypt
-        const role = 'user'; // hanya boleh mendaftar sebagai user
-        const result = await pool.query(
-            'INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING *',
-            [name, email, password, role]
-        );
-        res.json(result.rows[0]);
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
+  try {
+    const { name, email, password } = req.body;
+    const role = 'user';
+
+    // TODO: hash password with bcrypt (disarankan untuk keamanan)
+    const result = await pool.query(
+      'INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING *',
+      [name, email, password, role]
+    );
+
+    const user = result.rows[0];
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    res.status(201).json({
+      message: "User registered successfully",
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: err.message });
+  }
 });
 
 // Login

@@ -12,7 +12,6 @@ export default function TabLayout() {
   }, []);
 
   return (
-    <SafeAreaView>
     <>
       <StatusBar style="light" hidden />
       <Tabs
@@ -20,7 +19,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, size }) => {
             let iconName;
             switch (route.name) {
-              case 'home':
+              case 'index':
                 iconName = 'home';
                 break;
               case 'nutrition':
@@ -49,12 +48,11 @@ export default function TabLayout() {
           headerShown: false,
         })}
       >
-        <Tabs.Screen name="index" />
+        <Tabs.Screen name="index" options={{ title: 'Home' }} />
         <Tabs.Screen name="nutrition" />
         <Tabs.Screen name="chatbot" />
         <Tabs.Screen name="profile" />
       </Tabs>
     </>
-    </SafeAreaView>
   );
 }
