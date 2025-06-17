@@ -34,7 +34,7 @@ export default function Page() {
 
       try {
         // Panggil API untuk ambil data user berdasarkan token
-        const response = await fetch('http://192.168.1.104:3000/auth/login', {
+        const response = await fetch('http://192.168.1.100:3000/auth/login', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -115,18 +115,33 @@ export default function Page() {
           </View>
         </View>
 
-        <MenuItem image={require('@/assets/images/closestGym.png')} title="Closest Gym" />
-        <MenuItem image={require('@/assets/images/trainYourself.png')} title="Train Yourself" />
-        <MenuItem image={require('@/assets/images/trainWithExpert.png')} title="Train with Expert" />
-        <MenuItem image={require('@/assets/images/chatBot.png')} title="Chatbot" />
-        <MenuItem image={require('@/assets/images/nutrition.png')} title="Nutrition" />
+        <MenuItem
+          image={require('@/assets/images/trainYourself.png')}
+          title="Train Yourself"
+          onPress={() => router.push('/training')}
+        />
+        <MenuItem
+          image={require('@/assets/images/trainWithExpert.png')}
+          title="Train with Expert"
+          onPress={() => router.push('/profile')}
+        />
+        <MenuItem
+          image={require('@/assets/images/chatBot.png')}
+          title="Chatbot"
+          onPress={() => router.push('/chatbot')}
+        />
+        <MenuItem
+          image={require('@/assets/images/nutrition.png')}
+          title="Nutrition"
+          onPress={() => router.push('/nutrition')}
+        />
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-const MenuItem = ({ image, title }) => (
-  <TouchableOpacity style={styles.menuItem}>
+const MenuItem = ({ image, title, onPress }) => (
+  <TouchableOpacity style={styles.menuItem} onPress={onPress}>
     <Image source={image} style={styles.menuImage} />
     <Text style={styles.menuTitle}>{title}</Text>
   </TouchableOpacity>
