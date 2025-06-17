@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { styles } from '../assets/styles/salad-hambali.styles';
+import { useRouter } from 'expo-router';
 
 const menuItems = [
   {
@@ -76,7 +77,8 @@ export default function SaladHambaliPage() {
             <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
                  <Ionicons name="arrow-back" size={24} color="white" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.cartButton}>
+            {/* MODIFIKASI: Tambahkan onPress untuk navigasi ke keranjang */}
+            <TouchableOpacity onPress={() => router.push('/cart')} style={styles.cartButton}>
                 <Ionicons name="cart-outline" size={28} color="white" />
             </TouchableOpacity>
         </View>

@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router'; // Import useRouter
 import { styles } from '../../assets/styles/nutrition.styles';
+import { useRouter } from 'expo-router';
 
 const nutritionData = [
   {
@@ -102,11 +103,10 @@ const NutritionCard = ({ item, onPress }) => (
 );
 
 export default function NutritionPage() {
-  const router = useRouter(); // Inisialisasi router
+  const router = useRouter(); 
 
-  // Fungsi untuk menangani penekanan kartu
   const handleCardPress = (item) => {
-    if (item.id === '2') { // Hanya untuk Salad Hambali
+    if (item.id === '2') { 
       router.push('/salad-hambali');
     }
   };
@@ -114,7 +114,8 @@ export default function NutritionPage() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity>
+        {/* MODIFIKASI: Tambahkan onPress untuk navigasi ke keranjang */}
+        <TouchableOpacity onPress={() => router.push('/cart')}>
           <Ionicons name="cart-outline" size={32} color="#0d1b2a" />
         </TouchableOpacity>
       </View>
