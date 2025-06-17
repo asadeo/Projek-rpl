@@ -9,8 +9,7 @@ import { SafeAreaView } from 'react-native';
 export default function TabLayout() {
 
   useEffect(() => {
-    NavigationBar.setVisibilityAsync("hidden")
-    ;
+    NavigationBar.setVisibilityAsync("hidden");
   }, []);
 
   return (

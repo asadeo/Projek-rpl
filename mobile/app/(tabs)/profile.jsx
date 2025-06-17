@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 export default function ProfilePage() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>This is the Profile Page</Text>
+      <Text style={styles.text}>This is the Trainer Page</Text>
     </View>
   );
 }
