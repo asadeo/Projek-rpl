@@ -2,10 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, TextInput, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { styles } from "@/assets/styles/chatbot.styles.js";
 import axios from 'axios';
+import { GROQ_API_KEY, GROQ_MODEL } from '@env';
 
-const API_KEY = "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";
 const API_URL = "https://api.groq.com/openai/v1/chat/completions";
-const currentModel = "gemma2-9b-it";
 
 export default function ChatbotPage() {
   const [messages, setMessages] = useState([
@@ -18,21 +17,19 @@ export default function ChatbotPage() {
     if (!userInput.trim()) return;
 
     const newMessages = [...messages, { role: 'user', content: userInput }];
-    setMessages(newMessages);
-    setUserInput('');
-
     setMessages([...newMessages, { role: 'assistant', content: '...' }]);
+    setUserInput('');
 
     try {
       const res = await axios.post(API_URL, {
-        model: currentModel,
+        model: GROQ_MODEL,
         messages: newMessages,
         temperature: 0.7,
         max_tokens: 512
       }, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${API_KEY}`
+          'Authorization': `Bearer ${GROQ_API_KEY}`
         }
       });
 
