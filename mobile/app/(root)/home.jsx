@@ -34,7 +34,7 @@ export default function Page() {
 
       try {
         // Panggil API untuk ambil data user berdasarkan token
-        const response = await fetch('http://192.168.1.104:3000/auth/login', {
+        const response = await fetch('http://192.168.0.143:3000/auth/login', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

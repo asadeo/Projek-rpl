@@ -33,7 +33,7 @@ export default function SignUpScreen() {
       setLoading(true);
       setError('');
 
-      const response = await fetch('http://192.168.1.104:3000/auth/register', {
+      const response = await fetch('http://192.168.0.143:3000/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

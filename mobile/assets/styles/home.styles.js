@@ -262,7 +262,7 @@ export const styles = StyleSheet.create({
   },
   containerHome: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     backgroundColor: '#fff',
   },
   bannerContainer: {
