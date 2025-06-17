@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router'; // Import useRouter
 import { styles } from '../../assets/styles/nutrition.styles';
 
 const nutritionData = [
@@ -79,8 +80,9 @@ const nutritionData = [
   },
 ];
 
-const NutritionCard = ({ item }) => (
-  <View style={styles.card}>
+// Ubah NutritionCard untuk menerima prop onPress
+const NutritionCard = ({ item, onPress }) => (
+  <TouchableOpacity onPress={onPress} style={styles.card}>
     <Image source={item.image} style={styles.cardImage} />
     <View style={styles.cardContent}>
       <View style={styles.tagsContainer}>
@@ -96,15 +98,32 @@ const NutritionCard = ({ item }) => (
       </View>
       <Text style={styles.location}>{item.location}</Text>
     </View>
-  </View>
+  </TouchableOpacity>
 );
 
 export default function NutritionPage() {
+  const router = useRouter(); // Inisialisasi router
+
+  // Fungsi untuk menangani penekanan kartu
+  const handleCardPress = (item) => {
+    if (item.id === '2') { // Hanya untuk Salad Hambali
+      router.push('/salad-hambali');
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity>
+          <Ionicons name="cart-outline" size={32} color="#0d1b2a" />
+        </TouchableOpacity>
+      </View>
+
       <FlatList
         data={nutritionData}
-        renderItem={({ item }) => <NutritionCard item={item} />}
+        renderItem={({ item }) => (
+          <NutritionCard item={item} onPress={() => handleCardPress(item)} />
+        )}
         keyExtractor={(item) => item.id}
         numColumns={2}
         columnWrapperStyle={styles.row}

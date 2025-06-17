@@ -5,9 +5,15 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingHorizontal: 24,
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
   listContainer: {
     paddingHorizontal: 8,
-    paddingTop: 16,
   },
   row: {
     justifyContent: 'space-between',
