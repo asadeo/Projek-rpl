@@ -3,6 +3,7 @@ import { Slot, Redirect, usePathname } from "expo-router";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PageLoader from "../components/PageLoader";
+import * as NavigationBar from 'expo-navigation-bar';
 
 export default function RootLayout() {
   const [loading, setLoading] = useState(true);
@@ -17,6 +18,7 @@ export default function RootLayout() {
       setLoading(false);
     };
     checkOnboarding();
+    NavigationBar.setVisibilityAsync("hidden");
   }, []);
 
   if (loading) {

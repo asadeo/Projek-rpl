@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router'; // Import useRouter
 import { styles } from '../../assets/styles/nutrition.styles';
@@ -103,6 +103,7 @@ const NutritionCard = ({ item, onPress }) => (
 
 export default function NutritionPage() {
   const router = useRouter(); // Inisialisasi router
+  const insets = useSafeAreaInsets(); 
 
   // Fungsi untuk menangani penekanan kartu
   const handleCardPress = (item) => {
@@ -112,7 +113,7 @@ export default function NutritionPage() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.header}>
         <TouchableOpacity>
           <Ionicons name="cart-outline" size={32} color="#0d1b2a" />
@@ -129,6 +130,6 @@ export default function NutritionPage() {
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.listContainer}
       />
-    </SafeAreaView>
+    </View>
   );
 }
