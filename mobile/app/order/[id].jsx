@@ -6,8 +6,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from '../../assets/styles/order.styles';
 
-const API_URL = 'http://192.168.1.104:3000'; // Pastikan IP sesuai
+// Pastikan IP address ini sesuai dengan alamat IP backend Anda
+const API_URL = 'http://192.168.1.111:3000'; 
 
+/**
+ * Fungsi untuk memformat tanggal dan waktu agar lebih mudah dibaca.
+ * @param {string} dateString - String tanggal (misal: "2025-06-22T00:00:00.000Z")
+ * @param {string} timeString - String waktu (misal: "15:00:00")
+ * @returns {string} Tanggal dan waktu yang diformat (misal: "Sunday, June 22, 2025 at 3:00 PM")
+ */
 const formatDate = (dateString, timeString) => {
   try {
     const date = new Date(`${dateString.split('T')[0]}T${timeString}`);
@@ -21,6 +28,7 @@ const formatDate = (dateString, timeString) => {
       hour12: true,
     });
   } catch (e) {
+    console.error("Invalid date format:", e);
     return 'Invalid Date';
   }
 };
@@ -28,19 +36,27 @@ const formatDate = (dateString, timeString) => {
 export default function OrderPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  // Ambil semua data trainer yang dikirim dari halaman chat
-  const trainer = params; 
+  const trainer = params; // Mengambil semua data trainer dari parameter navigasi
 
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fungsi untuk mengambil jadwal dari server
   const fetchSchedules = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        router.replace('/(auth)/sign-in');
+        return;
+      }
+      
       const response = await fetch(`${API_URL}/trainer/schedule/${trainer.id}`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
-      if (!response.ok) throw new Error('Gagal mengambil jadwal');
+
+      if (!response.ok) {
+        throw new Error('Gagal mengambil jadwal konsultasi');
+      }
       const data = await response.json();
       setSchedules(data);
     } catch (error) {
@@ -52,29 +68,32 @@ export default function OrderPage() {
 
   useEffect(() => {
     fetchSchedules();
-  }, []);
+  }, [trainer.id]); // Ambil ulang data jika ID trainer berubah
 
-  // --- PERBAIKAN UTAMA ADA DI FUNGSI INI ---
-  // Fungsi ini sekarang hanya untuk memilih jadwal dan navigasi, bukan booking.
+  // Fungsi yang dipanggil saat user memilih jadwal
   const handleSelectSchedule = (scheduleItem) => {
     if (scheduleItem.is_booked) {
-      Alert.alert('Sudah Dipesan', 'Jadwal ini tidak lagi tersedia.');
+      Alert.alert('Sudah Dipesan', 'Jadwal ini tidak lagi tersedia untuk dipesan.');
       return;
     }
     
-    // Arahkan pengguna ke halaman pembayaran dengan membawa data trainer dan jadwal yang dipilih.
+    // Navigasi ke halaman pembayaran dengan mengirimkan data jadwal dan trainer
     router.push({
-      pathname: '/payment', // Halaman pembayaran yang kita buat sebelumnya
+      pathname: '/payment',
       params: { 
-        schedule: JSON.stringify(scheduleItem), // Kirim objek jadwal
-        trainer: JSON.stringify(trainer)       // Kirim objek trainer
+        schedule: JSON.stringify(scheduleItem),
+        trainer: JSON.stringify(trainer)
       }
     });
   };
 
+  // Komponen untuk merender setiap item jadwal
   const renderScheduleItem = ({ item }) => (
-    // Panggil handleSelectSchedule saat jadwal ditekan
-    <TouchableOpacity onPress={() => handleSelectSchedule(item)} style={styles.scheduleItem}>
+    <TouchableOpacity 
+      style={styles.scheduleItem}
+      onPress={() => handleSelectSchedule(item)} 
+      disabled={item.is_booked}
+    >
       <Text style={styles.scheduleTime}>
         {formatDate(item.schedule_date, item.schedule_time)}
       </Text>
@@ -104,16 +123,21 @@ export default function OrderPage() {
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={styles.listContainer}
           ListHeaderComponent={
+            // Menampilkan informasi trainer di bagian atas daftar
             <View style={styles.trainerCard}>
-              <Image source={{ uri: `${API_URL}${trainer.profile_picture_url}` }} style={styles.trainerImage} />
+              <Image 
+                source={{ uri: trainer.profile_picture_url ? `${API_URL}${trainer.profile_picture_url}` : 'https://via.placeholder.com/80' }} 
+                style={styles.trainerImage} 
+              />
               <View>
                 <Text style={styles.trainerName}>{trainer.name}</Text>
               </View>
             </View>
           }
           ListEmptyComponent={
+            // Tampilan jika tidak ada jadwal yang tersedia
             <View style={styles.emptyContainer}>
-                <Text style={styles.emptyText}>Trainer ini belum memiliki jadwal.</Text>
+                <Text style={styles.emptyText}>Trainer ini belum memiliki jadwal yang tersedia.</Text>
             </View>
           }
         />
