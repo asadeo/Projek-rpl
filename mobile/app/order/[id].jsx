@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from '../../assets/styles/order.styles';
 
-const API_URL = 'http://192.168.1.104:3000'; // Pastikan IP sesuai
+const API_URL = 'http://192.168.1.111:3000'; // Pastikan IP sesuai
 
 const formatDate = (dateString, timeString) => {
   try {
