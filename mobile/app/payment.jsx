@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from '../assets/styles/payment.styles';
 
-const API_URL = 'http://192.168.1.104:3000'; // Pastikan IP sesuai
+const API_URL = 'http://192.168.1.111:3000'; // Pastikan IP sesuai
 
 const paymentOptions = [
   { key: 'Gopay', name: 'Gopay', logo: require('../assets/images/gopay-logo.jpeg') },
@@ -36,7 +36,7 @@ export default function PaymentPage() {
           onPress: async () => {
             try {
               const token = await AsyncStorage.getItem('token');
-              const response = await fetch(`${API_URL}/trainer/schedule/book/${schedule.id}`, {
+              const response = await fetch(`${API_URL}/auth/trainer/schedule/book/${schedule.id}`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` },
               });
@@ -57,7 +57,7 @@ export default function PaymentPage() {
     );
   };
   
-  const serviceFee = 1500;
+  const serviceFee = 5000;
   const subtotal = parseInt(trainer.price, 10);
   const total = subtotal + serviceFee;
 

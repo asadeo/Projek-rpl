@@ -19,7 +19,7 @@ const TrainerCard = ({ trainer, router }) => {
     // --- PERBAIKAN DI SINI ---
     // Menggunakan pathname dengan [id] dan mengirim semua data trainer di params
     router.push({
-      pathname: '/chat/[id]',
+      pathname: '/chat/chat_page',
       params: { ...trainer }
     });
   };
