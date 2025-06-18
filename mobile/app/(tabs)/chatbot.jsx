@@ -11,6 +11,7 @@ const GROQ_MODEL = process.env.EXPO_PUBLIC_GROQ_MODEL;
 const API_URL = "https://api.groq.com/openai/v1/chat/completions";
 
 export default function ChatbotPage() {
+  const [name, setName] = useState('');
   const scrollViewRef = useRef();
   const [currentChat, setCurrentChat] = useState([
     { role: 'system', content: "Kamu adalah asisten untuk aplikasi gym trainer bernama 'FitBot'. Jawablah dengan sopan dan berikan saran fitness jika diminta." }
@@ -18,6 +19,31 @@ export default function ChatbotPage() {
   const [userInput, setUserInput] = useState('');
 
   const isNewChat = currentChat.length <= 1;
+
+  const loadUser = async () => {
+    const token = await AsyncStorage.getItem('token');
+    if (!token) {
+      router.replace('/(auth)/sign-in');
+      return;
+    }
+  
+    try {
+      const res = await fetch(`http://192.168.1.111:3000/auth/profile`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      if (!res.ok) throw new Error("Gagal mengambil profil");
+  
+      const data = await res.json();
+      setName(data.name || 'User');
+    } catch (err) {
+      console.error('Profile fetch error:', err);
+      setName('User');
+    }
+  };
+    useEffect(() => {
+    loadUser();
+  }, []);
 
   // ... (fungsi useEffect, sendMessage, dll. tetap sama)
   const sendMessage = async (messageText = userInput) => {
@@ -57,13 +83,14 @@ export default function ChatbotPage() {
       <Text style={styles.suggestionText}>{text}</Text>
     </TouchableOpacity>
   );
+  
 
   return (
     // MODIFIKASI 2: Bungkus semuanya dengan KeyboardAvoidingView
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20} // Sesuaikan offset jika perlu
+      behavior={Platform.OS === 'android' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'android' ? 0 : 20} // Sesuaikan offset jika perlu
     >
       <View style={styles.container}>
         {/* Header Judul */}
@@ -77,7 +104,7 @@ export default function ChatbotPage() {
           <View style={styles.welcomeContainer}>
             {/* ... (kode welcome screen tetap sama) ... */}
             <Text style={styles.welcomeText}>
-              Hello, Fellow Gym! How can I help you today? Please type whatever you want to ask me.
+              Hello, {name}! How can I help you today? Please type whatever you want to ask me.
             </Text>
             <View style={styles.suggestionContainer}>
               <SuggestionChip text="Get Advice" icon={<MaterialCommunityIcons name="lightbulb-on-outline" size={18} color="orange" />} />
