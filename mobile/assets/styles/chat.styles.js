@@ -65,7 +65,6 @@ export const styles = StyleSheet.create({
   // Tombol Order & Input
   bottomContainer: {
     padding: 10,
-    marginBottom: 50,
     backgroundColor: '#E9E9E9',
   },
   orderButton: {
