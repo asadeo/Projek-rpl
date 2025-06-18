@@ -6,20 +6,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from '../../assets/styles/trainer.styles';
 
-// Ganti dengan IP Address lokal Anda
 const API_URL = 'http://192.168.1.104:3000'; 
 
-const TrainerCard = ({ trainer }) => {
-  // Gunakan gambar placeholder jika URL gambar tidak ada
+// -- MODIFIKASI: Tambahkan router sebagai prop --
+const TrainerCard = ({ trainer, router }) => {
   const imageUrl = trainer.profile_picture_url 
     ? { uri: `${API_URL}${trainer.profile_picture_url}` }
     : require('../../assets/images/default-profile.png');
 
- const handleChatPress = () => {
-    // Navigasi ke halaman chat dengan membawa data trainer sebagai parameter
+  // -- FUNGSI BARU UNTUK NAVIGASI KE CHAT --
+  const handleChatPress = () => {
     router.push({
       pathname: `/chat/${trainer.id}`,
-      params: { ...trainer }
+      params: { ...trainer } // Mengirim semua data trainer ke halaman chat
     });
   };
 
@@ -39,6 +38,7 @@ const TrainerCard = ({ trainer }) => {
           </View>
         </View>
       </View>
+      {/* -- MODIFIKASI: Tambahkan onPress -- */}
       <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
         <Ionicons name="chatbubble-ellipses-outline" size={24} color="#888" />
       </TouchableOpacity>
@@ -51,6 +51,7 @@ export default function TrainerPage() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  // ... (useEffect untuk fetchTrainers tidak berubah) ...
   useEffect(() => {
     const fetchTrainers = async () => {
       try {
@@ -68,6 +69,7 @@ export default function TrainerPage() {
 
         if (response.status === 401 || response.status === 403) {
              Alert.alert('Sesi habis', 'Silakan masuk kembali.');
+             await AsyncStorage.clear();
              router.replace('/(auth)/sign-in');
              return;
         }
@@ -100,6 +102,7 @@ export default function TrainerPage() {
       </View>
       <FlatList
         data={trainers}
+        // -- MODIFIKASI: Kirim router ke TrainerCard --
         renderItem={({ item }) => <TrainerCard trainer={item} router={router} />}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.listContainer}
