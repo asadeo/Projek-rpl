@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
 import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
+import { Feather } from '@expo/vector-icons'; 
 
 export default function Page() {
   const router = useRouter();
@@ -27,20 +28,28 @@ export default function Page() {
   };
 
   const loadUser = async () => {
-    const token = await AsyncStorage.getItem('token');
-    if (!token) {
-      router.replace('/(auth)/sign-in');
-      return;
-    }
+  const token = await AsyncStorage.getItem('token');
+  if (!token) {
+    router.replace('/(auth)/sign-in');
+    return;
+  }
 
-    try {
-      const decoded = jwt_decode(token);
-      setEmail(decoded.email || 'User');
-    } catch (err) {
-      console.error('Failed to decode token', err);
-      setEmail('User');
-    }
-  };
+  try {
+    const res = await fetch(`http://192.168.1.111:3000/auth/profile`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!res.ok) throw new Error("Gagal mengambil profil");
+
+    const data = await res.json();
+    setEmail(data.email || 'User');
+    setName(data.name || 'User');
+  } catch (err) {
+    console.error('Profile fetch error:', err);
+    setEmail('User');
+    setName('User');
+  }
+};
 
   const handleSignOut = async () => {
     await AsyncStorage.removeItem('token');
@@ -61,15 +70,17 @@ export default function Page() {
       {email ? (
         <ScrollView style={styles.containerHome}>
           {/* Header */}
-          <View style={styles.headerRow}>
-            <Image source={require('@/assets/images/Logo-mahao.png')} style={styles.logoSmall} resizeMode="contain" />
-            <View style={styles.headerRightColumn}>
-              <Text style={styles.welcome}>Welcome, {name}</Text>
-              <TouchableOpacity onPress={handleSignOut}>
-                <Text style={{ color: 'red' }}>Sign Out</Text>
-              </TouchableOpacity>
-            </View>
+        <View style={[styles.headerRow, { justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 5 }]}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <TouchableOpacity onPress={() => router.push('/profile')}>
+              <Feather name="user" size={24} color="#0d1b2a" />
+            </TouchableOpacity>
+              <Text style={{ fontSize: 16, fontWeight: '500', color: '#0d1b2a' }}>
+                welcome, {name}
+              </Text>
           </View>
+        </View>
+
 
           {/* Banner */}
           <View>

@@ -5,6 +5,7 @@ import { styles } from "@/assets/styles/auth.styles.js";
 import { COLORS } from '../../constants/color';
 import { Ionicons } from "@expo/vector-icons";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 
 export default function Page() {
