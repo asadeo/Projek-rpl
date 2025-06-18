@@ -1,5 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, FlatList, Image, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, Platform, Alert } from 'react-native';
+import { 
+  View, 
+  Text, 
+  TextInput, 
+  FlatList, 
+  Image, 
+  TouchableOpacity, 
+  ActivityIndicator, 
+  KeyboardAvoidingView, 
+  Platform, 
+  Alert 
+} from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,13 +22,14 @@ const API_URL = 'http://192.168.1.104:3000'; // Pastikan IP Address ini benar
 export default function ChatPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const { id: trainerId, name, profile_picture_url, price } = params;
+  // Ambil semua params yang dibutuhkan dari navigasi
+  const { id: trainerId, name, profile_picture_url, price } = params; 
 
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState('');
   const [userId, setUserId] = useState(null);
-  const flatListRef = useRef();
+  const flatListRef = useRef(null);
 
   const fetchMessages = async () => {
     try {
@@ -28,7 +40,7 @@ export default function ChatPage() {
         return;
       }
       setUserId(parseInt(storedUserId, 10));
-
+      
       const response = await fetch(`${API_URL}/auth/messages/${trainerId}`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
@@ -43,15 +55,14 @@ export default function ChatPage() {
 
   useEffect(() => {
     fetchMessages();
-    // Polling untuk refresh chat, akan berhenti saat halaman ditutup
     const interval = setInterval(fetchMessages, 5000);
     return () => clearInterval(interval);
   }, [trainerId]);
-
+  
   const handleSend = async () => {
     if (text.trim().length === 0) return;
     const messageContent = text;
-    setText(''); // Langsung kosongkan input untuk responsivitas UI
+    setText('');
 
     try {
       const token = await AsyncStorage.getItem('token');
@@ -63,18 +74,17 @@ export default function ChatPage() {
         },
         body: JSON.stringify({ receiver_id: trainerId, content: messageContent }),
       });
-      // Ambil ulang pesan setelah berhasil terkirim
       await fetchMessages();
     } catch (error) {
       console.error("Send Message Error:", error);
       Alert.alert("Gagal", "Pesan tidak terkirim.");
-      setText(messageContent); // Kembalikan teks jika gagal terkirim
+      setText(messageContent);
     }
   };
 
   const renderMessage = ({ item }) => (
     <View style={[styles.messageBubble, item.sender_id === userId ? styles.sent : styles.received]}>
-      <Text style={styles.messageText}>{item.content}</Text>
+      <Text style={[styles.messageText, item.sender_id === userId ? styles.sentText : styles.receivedText]}>{item.content}</Text>
     </View>
   );
 
@@ -83,7 +93,6 @@ export default function ChatPage() {
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -500} // Adjust if needed
       >
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
@@ -115,7 +124,11 @@ export default function ChatPage() {
         <View style={styles.bottomContainer}>
           <TouchableOpacity 
             style={styles.orderButton}
-            onPress={() => router.push({ pathname: `/order/${trainerId}`, params: { id: trainerId, name, profile_picture_url, price } })}
+            onPress={() => router.push({ 
+              // --- PERBAIKAN NAVIGASI DI SINI ---
+              pathname: `/order/${trainerId}`, 
+              params: { name, profile_picture_url, price } // Kirim params tanpa duplikat 'id'
+            })}
           >
             <Text style={styles.orderButtonText}>Order Trainer</Text>
           </TouchableOpacity>

@@ -16,9 +16,11 @@ const TrainerCard = ({ trainer, router }) => {
 
   // -- FUNGSI BARU UNTUK NAVIGASI KE CHAT --
   const handleChatPress = () => {
+    // --- PERBAIKAN DI SINI ---
+    // Menggunakan pathname dengan [id] dan mengirim semua data trainer di params
     router.push({
-      pathname: `/chat/${trainer.id}`,
-      params: { ...trainer } // Mengirim semua data trainer ke halaman chat
+      pathname: '/chat/[id]',
+      params: { ...trainer }
     });
   };
 
@@ -31,14 +33,8 @@ const TrainerCard = ({ trainer, router }) => {
         <Text style={styles.experience}>{trainer.experience_years} years experience</Text>
         <View style={styles.footer}>
           <Text style={styles.price}>Rp {trainer.price}</Text>
-          <View style={styles.ratingContainer}>
-            <Ionicons name="star" size={16} color="#FFD700" />
-            <Text style={styles.rating}>5.0</Text>
-            <Text style={styles.review}> (Review 22)</Text>
-          </View>
         </View>
       </View>
-      {/* -- MODIFIKASI: Tambahkan onPress -- */}
       <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
         <Ionicons name="chatbubble-ellipses-outline" size={24} color="#888" />
       </TouchableOpacity>
