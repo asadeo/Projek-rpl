@@ -20,7 +20,7 @@ export default function ProfilePage() {
         setLoading(true);
         const token = await AsyncStorage.getItem('token');
         if (!token) {
-          router.replace('/sign-in');
+          router.replace('/(auth)/sign-in');
           return;
         }
 
@@ -30,7 +30,6 @@ export default function ProfilePage() {
           });
 
           if (!res.ok) {
-            // If the token is invalid, sign out the user
             if (res.status === 401 || res.status === 403) {
               await handleSignOut();
             }
@@ -164,7 +163,7 @@ export default function ProfilePage() {
         {profile.role !== 'trainer' && (
             <TouchableOpacity 
                 style={[styles.button, styles.registerButton]} 
-                onPress={() => Alert.alert("Coming Soon!", "This feature is under development.")}
+                onPress={() => router.push('/register-trainer')} // Updated this line
             >
                 <Text style={styles.buttonText}>Register as Trainer</Text>
             </TouchableOpacity>
