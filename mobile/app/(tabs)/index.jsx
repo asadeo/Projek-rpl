@@ -2,15 +2,16 @@ import { useEffect, useState, useRef } from 'react';
 import { Text, View, Image, ScrollView, TouchableOpacity, SafeAreaView, useWindowDimensions } from 'react-native';
 import { styles } from '../../assets/styles/home.styles.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import jwt_decode from 'jwt-decode';
 import { useRouter } from 'expo-router';
+import * as WebBrowser from 'expo-web-browser';
+import { Feather } from '@expo/vector-icons'; 
 
 export default function Page() {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [email, setEmail] = useState(null);
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const scrollRef = useRef(null);
 
   const banners = [
@@ -26,24 +27,32 @@ export default function Page() {
   };
 
   const loadUser = async () => {
-    const token = await AsyncStorage.getItem('token');
-    if (!token) {
-      router.replace('/(auth)/sign-in');
-      return;
-    }
-
-    try {
-      const decoded = jwt_decode(token);
-      setEmail(decoded.email || 'User');
-    } catch (err) {
-      console.error('Failed to decode token', err);
-      setEmail('User');
-    }
-  };
-
-  const handleSignOut = async () => {
-    await AsyncStorage.removeItem('token');
+  const token = await AsyncStorage.getItem('token');
+  if (!token) {
     router.replace('/(auth)/sign-in');
+    return;
+  }
+
+  try {
+    const res = await fetch(`http://192.168.1.111:3000/auth/profile`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!res.ok) throw new Error("Gagal mengambil profil");
+
+    const data = await res.json();
+    setEmail(data.email || 'User');
+    setName(data.name || 'User');
+  } catch (err) {
+    console.error('Profile fetch error:', err);
+    setEmail('User');
+    setName('User');
+  }
+};
+
+  const handleClosestGymPress = async () => {
+    const url = 'https://www.google.com/search?q=closest+gym&sca_esv=8900ff206bef6d47&biw=1536&bih=695&tbm=lcl&ei=j5JRaOiaBqv34-EP2vWPiAY&oq=clostes&gs_lp=Eg1nd3Mtd2l6LWxvY2FsIgdjbG9zdGVzKgIIADILEAAYgAQYkQIYigUyBxAAGIAEGAoyBxAAGIAEGAoyBxAAGIAEGAoyBxAAGIAEGAoyBxAAGIAEGAoyBxAAGIAEGAoyBxAAGIAEGAoyBxAAGIAEGAoyBxAAGIAEGApInB9QAFiJE3AAeACQAQCYAWWgAcwEqgEDNi4xuAEDyAEA-AEBmAIHoALuBMICChAAGIAEGEMYigXCAggQABiABBixA8ICCxAAGIAEGLEDGIMBwgIFEAAYgATCAgsQABiABBixAxiKBZgDAJIHAzYuMaAHkyayBwM2LjG4B-4EwgcFMC4yLjXIBxs&sclient=gws-wiz-local#rlfi=hd:;si:;mv:[[-7.0154913,110.43120569999999],[-7.084403399999999,110.3838238]];tbs:lrf:!1m4!1u3!2m2!3m1!1e1!1m4!1u2!2m2!2m1!1e1!2m1!1e2!2m1!1e3!2m4!1e17!4m2!17m1!1e2!3sIAE,lf:1,lf_ui:14';
+    await WebBrowser.openBrowserAsync(url);
   };
 
   useEffect(() => {
@@ -55,15 +64,17 @@ export default function Page() {
       {email ? (
         <ScrollView style={styles.containerHome}>
           {/* Header */}
-          <View style={styles.headerRow}>
-            <Image source={require('@/assets/images/Logo-mahao.png')} style={styles.logoSmall} resizeMode="contain" />
-            <View style={styles.headerRightColumn}>
-              <Text style={styles.welcome}>Welcome, {username}</Text>
-              <TouchableOpacity onPress={handleSignOut}>
-                <Text style={{ color: 'red' }}>Sign Out</Text>
-              </TouchableOpacity>
-            </View>
+        <View style={[styles.headerRow, { justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 5 }]}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <TouchableOpacity onPress={() => router.push('/profile')}>
+              <Feather name="user" size={24} color="#0d1b2a" />
+            </TouchableOpacity>
+              <Text style={{ fontSize: 16, fontWeight: '500', color: '#0d1b2a' }}>
+                welcome, {name}
+              </Text>
           </View>
+        </View>
+
 
           {/* Banner */}
           <View>
@@ -102,7 +113,11 @@ export default function Page() {
           </View>
 
           {/* Menu Sections */}
-        <MenuItem image={require('@/assets/images/closestGym.png')} title="Closest Gym" />
+        <MenuItem 
+          image={require('@/assets/images/closestGym.png')} 
+          title="Closest Gym"
+          onPress={handleClosestGymPress} 
+        />
         <MenuItem
           image={require('@/assets/images/trainYourself.png')}
           title="Train Yourself"

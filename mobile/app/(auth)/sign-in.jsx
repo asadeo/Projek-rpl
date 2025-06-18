@@ -5,6 +5,7 @@ import { styles } from "@/assets/styles/auth.styles.js";
 import { COLORS } from '../../constants/color';
 import { Ionicons } from "@expo/vector-icons";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 
 export default function Page() {
@@ -32,7 +33,7 @@ const onSignInPress = async () => {
   setLoading(true);
 
   try {
-    const response = await fetch("http://192.168.1.100:3000/auth/login", {
+    const response = await fetch("http://192.168.1.111:3000/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
