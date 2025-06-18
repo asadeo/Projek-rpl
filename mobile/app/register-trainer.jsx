@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-const API_URL = 'http://192.168.0.143:3000';
+const API_URL = 'http://192.168.1.111:3000';
 
 export default function RegisterTrainer() {
   const router = useRouter();

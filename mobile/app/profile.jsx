@@ -164,7 +164,7 @@ export default function ProfilePage() {
         {profile.role !== 'trainer' && (
             <TouchableOpacity 
                 style={[styles.button, styles.registerButton]} 
-                onPress={() => Alert.alert("Coming Soon!", "This feature is under development.")}
+                onPress={() => router.push('/register-trainer')}
             >
                 <Text style={styles.buttonText}>Register as Trainer</Text>
             </TouchableOpacity>
