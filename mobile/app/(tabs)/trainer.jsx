@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from '../../assets/styles/trainer.styles';
 
-const API_URL = 'http://192.168.1.104:3000'; 
+const API_URL = 'http://192.168.1.111:3000'; 
 
 // -- MODIFIKASI: Tambahkan router sebagai prop --
 const TrainerCard = ({ trainer, router }) => {
