@@ -11,7 +11,7 @@ export default function Page() {
   const { width } = useWindowDimensions();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [email, setEmail] = useState(null);
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const scrollRef = useRef(null);
 
   const banners = [
@@ -64,7 +64,7 @@ export default function Page() {
           <View style={styles.headerRow}>
             <Image source={require('@/assets/images/Logo-mahao.png')} style={styles.logoSmall} resizeMode="contain" />
             <View style={styles.headerRightColumn}>
-              <Text style={styles.welcome}>Welcome, {username}</Text>
+              <Text style={styles.welcome}>Welcome, {name}</Text>
               <TouchableOpacity onPress={handleSignOut}>
                 <Text style={{ color: 'red' }}>Sign Out</Text>
               </TouchableOpacity>

@@ -14,12 +14,12 @@ export default function SignUpScreen() {
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const onSignUpPress = async () => {
-    if (!emailAddress || !password || !confirmPassword || !username) {
+    if (!emailAddress || !password || !confirmPassword || !name) {
       setError('Please fill in all fields.');
       return;
     }
@@ -33,13 +33,13 @@ export default function SignUpScreen() {
       setLoading(true);
       setError('');
 
-      const response = await fetch('http://192.168.1.100:3000/auth/register', {
+      const response = await fetch('http://192.168.1.111:3000/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username,
+          name,
           email: emailAddress,
           password,
         }),
@@ -96,8 +96,8 @@ export default function SignUpScreen() {
           style={[styles.input, error && styles.errorInput]}
           placeholder="Username"
           placeholderTextColor="#8F9098"
-          value={username}
-          onChangeText={setUsername}
+          value={name}
+          onChangeText={setName}
         />
 
         <TextInput
