@@ -1,104 +1,137 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, Image, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from '../../assets/styles/order.styles';
 
 const API_URL = 'http://192.168.1.104:3000'; // Pastikan IP sesuai
 
+const formatDate = (dateString, timeString) => {
+  try {
+    const date = new Date(`${dateString.split('T')[0]}T${timeString}`);
+    return date.toLocaleString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    });
+  } catch (e) {
+    return 'Invalid Date';
+  }
+};
+
 export default function OrderPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const { id: trainerId, name, profile_picture_url, price } = params;
+  const { id: trainerId, name, profile_picture_url } = params;
 
-  const handleCreateOrder = async () => {
+  const [schedules, setSchedules] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchSchedules = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await fetch(`${API_URL}/trainer/schedule/${trainerId}`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      if (!response.ok) throw new Error('Gagal mengambil jadwal');
+      const data = await response.json();
+      setSchedules(data);
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSchedules();
+  }, []);
+
+  const handleBookSchedule = async (schedule) => {
+    if (schedule.is_booked) {
+      Alert.alert('Sudah Dipesan', 'Jadwal ini tidak lagi tersedia.');
+      return;
+    }
+
     Alert.alert(
-      "Konfirmasi Pesanan",
-      `Anda akan memesan sesi dengan ${name} seharga Rp ${price}.`,
+      'Konfirmasi Booking',
+      `Anda yakin ingin memesan jadwal pada ${formatDate(schedule.schedule_date, schedule.schedule_time)}?`,
       [
-        { text: "Batal", style: "cancel" },
+        { text: 'Batal', style: 'cancel' },
         {
-          text: "Pesan Sekarang", onPress: async () => {
+          text: 'Pesan',
+          onPress: async () => {
             try {
-              const userId = await AsyncStorage.getItem('user_id');
-              const consultationDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // Jadwal untuk besok (contoh)
-
-              if (!userId) {
-                Alert.alert("Error", "User tidak ditemukan, silakan login ulang.");
-                router.replace('/(auth)/sign-in');
-                return;
-              }
-
-              const response = await fetch(`${API_URL}/user/order-trainer`, {
+              const token = await AsyncStorage.getItem('token');
+              const response = await fetch(`${API_URL}/trainer/schedule/book/${schedule.id}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  user_id: parseInt(userId),
-                  trainer_id: parseInt(trainerId),
-                  consultation_date: consultationDate.toISOString(),
-                  fee: parseInt(price),
-                }),
+                headers: { 'Authorization': `Bearer ${token}` },
               });
-
-              const responseData = await response.json();
-
-              if (!response.ok) {
-                throw new Error(responseData.message || "Gagal membuat pesanan.");
-              }
-
-              Alert.alert("Sukses", "Pesanan Anda telah berhasil dibuat!");
-              router.push('/(tabs)/trainer');
-
+              if (!response.ok) throw new Error('Gagal melakukan booking.');
+              
+              Alert.alert('Sukses', 'Jadwal berhasil dipesan!');
+              setLoading(true);
+              fetchSchedules(); // Muat ulang jadwal untuk melihat status terbaru
             } catch (error) {
-              console.error("Create Order Error:", error);
-              Alert.alert("Error", error.message);
+              Alert.alert('Error', error.message);
             }
-          }
-        }
+          },
+        },
       ]
     );
   };
-  
+
+  const renderScheduleItem = ({ item }) => (
+    <TouchableOpacity onPress={() => handleBookSchedule(item)} style={styles.scheduleItem}>
+      <Text style={styles.scheduleTime}>
+        {formatDate(item.schedule_date, item.schedule_time)}
+      </Text>
+      <Text style={[styles.scheduleStatus, item.is_booked ? styles.statusBooked : styles.statusEmpty]}>
+        {item.is_booked ? 'Already Booked' : 'Empty'}
+      </Text>
+    </TouchableOpacity>
+  );
+
   return (
-    <View style={{ flex: 1, backgroundColor: '#f5f5f5' }}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Detail Pemesanan</Text>
-        <View style={{ width: 24 }} />
+        <Text style={styles.headerTitle}>Order a Consultation Schedule</Text>
       </View>
 
-      <ScrollView>
-        <View style={styles.trainerCard}>
-          <Image source={{ uri: `${API_URL}${profile_picture_url}` }} style={styles.trainerImage} />
-          <View style={styles.trainerInfo}>
-            <Text style={styles.trainerName}>{name}</Text>
-            <Text style={styles.trainerDesc}>Personal Trainer</Text>
-          </View>
+      {loading ? (
+        <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#0d1b2a" />
         </View>
-
-        <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Jadwal Konsultasi</Text>
-            <TouchableOpacity style={styles.scheduleButton}>
-                <Text>Pilih Jadwal (Contoh: Besok)</Text>
-            </TouchableOpacity>
-        </View>
-
-        <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Metode Pembayaran</Text>
-            <View style={styles.paymentOption}>
-                <Image source={require('../../assets/images/gopay-logo.png')} style={styles.paymentLogo} />
+      ) : (
+        <FlatList
+          data={schedules}
+          renderItem={renderScheduleItem}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.listContainer}
+          ListHeaderComponent={
+            <View style={styles.trainerCard}>
+              <Image source={{ uri: `${API_URL}${profile_picture_url}` }} style={styles.trainerImage} />
+              <View>
+                <Text style={styles.trainerName}>{name}</Text>
+              </View>
             </View>
-        </View>
-      </ScrollView>
-
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.payButton} onPress={handleCreateOrder}>
-          <Text style={styles.payButtonText}>Bayar Sekarang</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+          }
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+                <Text style={styles.emptyText}>Trainer ini belum memiliki jadwal.</Text>
+            </View>
+          }
+        />
+      )}
+    </SafeAreaView>
   );
 }

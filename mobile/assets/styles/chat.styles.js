@@ -1,65 +1,101 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f0f0f0' },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff', 
+  },
+  // Header
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
-    padding: 16,
-    paddingTop: 50, // Sesuaikan untuk status bar
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    paddingTop: 50,
     borderBottomWidth: 1,
-    borderColor: '#eee',
+    borderColor: '#E9E9E9',
   },
-  headerImage: { width: 40, height: 40, borderRadius: 20, marginRight: 12 },
-  headerInfo: { flex: 1 },
-  headerName: { fontSize: 18, fontWeight: 'bold' },
-  headerAction: { padding: 8 },
-  orderButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#eef2f9',
-    paddingVertical: 4,
+  backButton: {
+    padding: 8,
+    marginRight: 8,
+  },
+  headerImage: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    marginRight: 12,
+  },
+  headerName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  // Konten
+  content: {
+    flex: 1,
+    backgroundColor: '#E9E9E9',
     paddingHorizontal: 10,
-    borderRadius: 20,
   },
-  orderButtonText: { marginLeft: 6, color: '#0d1b2a', fontWeight: 'bold' },
-  messageContainer: { padding: 8 },
+  listContainer: {
+    paddingVertical: 10,
+  },
   messageBubble: {
-    padding: 12,
-    borderRadius: 18,
-    marginVertical: 4,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+    marginVertical: 5,
     maxWidth: '80%',
   },
   sent: {
-    backgroundColor: '#0d1b2a',
+    backgroundColor: '#fff',
     alignSelf: 'flex-end',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
   },
   received: {
     backgroundColor: '#fff',
     alignSelf: 'flex-start',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
   },
-  messageText: { fontSize: 16 },
-  sentText: { color: '#fff' },
-  receivedText: { color: '#000' },
+  messageText: {
+    fontSize: 16,
+    color: '#000',
+  },
+  // Tombol Order & Input
+  bottomContainer: {
+    padding: 10,
+    backgroundColor: '#E9E9E9',
+  },
+  orderButton: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 10,
+  },
+  orderButtonText: {
+    color: '#0d1b2a',
+    fontWeight: '600',
+  },
   inputContainer: {
     flexDirection: 'row',
-    padding: 8,
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderColor: '#ddd',
+    alignItems: 'center',
   },
   input: {
     flex: 1,
-    height: 40,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 20,
-    paddingHorizontal: 16,
+    height: 45,
+    backgroundColor: '#fff',
+    borderRadius: 25,
+    paddingHorizontal: 18,
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
   sendButton: {
-    marginLeft: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 8,
+    marginLeft: 10,
+    padding: 10,
   },
 });
