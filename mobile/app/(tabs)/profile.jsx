@@ -6,7 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 
 // Make sure this IP address is correct for your local network.
-const API_URL = 'http://192.168.0.143:3000'; 
+const API_URL = 'http://192.168.1.111:3000'; 
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -66,7 +66,7 @@ export default function ProfilePage() {
 
     // Launch image picker
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ImagePicker.MediaType.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
