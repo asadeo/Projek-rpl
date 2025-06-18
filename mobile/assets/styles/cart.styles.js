@@ -96,10 +96,11 @@ export const styles = StyleSheet.create({
     color: '#333',
   },
   footer: {
-    padding: 16,
+    padding: 20,
     backgroundColor: '#fff',
     borderTopWidth: 1,
     borderTopColor: '#eee',
+    paddingBottom: 50,
   },
   checkoutButton: {
     backgroundColor: '#0d1b2a',

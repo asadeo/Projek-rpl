@@ -31,7 +31,7 @@ export default function TabLayout() {
                 case 'index': iconName = 'home-outline'; break;
                 case 'nutrition': iconName = 'fast-food-outline'; break;
                 case 'chatbot': iconName = 'chatbubbles-outline'; break;
-                case 'profile': iconName = 'person-outline'; break;
+                case 'trainer': iconName = 'person-outline'; break;
                 default: iconName = 'apps-outline';
               }
               return <Ionicons name={iconName} size={24} color={color} />; 
@@ -58,7 +58,7 @@ export default function TabLayout() {
         <Tabs.Screen name="training" options={{ tabBarLabel: 'Training' }} />
         <Tabs.Screen name="nutrition" options={{ tabBarLabel: 'Nutrition' }} />
         <Tabs.Screen name="chatbot" options={{ tabBarLabel: 'Chatbot' }} />
-        <Tabs.Screen name="profile" options={{ tabBarLabel: 'Trainer' }} />
+        <Tabs.Screen name="trainer" options={{ tabBarLabel: 'Trainer' }} />
       </Tabs>
     </>
   );

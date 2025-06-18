@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router'; // Import useRouter
 import { styles } from '../../assets/styles/nutrition.styles';
 import { useRouter } from 'expo-router';
 
