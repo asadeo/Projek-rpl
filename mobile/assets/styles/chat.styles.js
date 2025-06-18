@@ -12,12 +12,12 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    paddingTop: 0,
+    paddingTop: 10,
     borderBottomWidth: 1,
     borderColor: '#E9E9E9',
   },
   backButton: {
-    padding: 8,
+    padding: 10,
     marginRight: 8,
   },
   headerImage: {
@@ -65,7 +65,7 @@ export const styles = StyleSheet.create({
   // Tombol Order & Input
   bottomContainer: {
     padding: 10,
-    paddingBottom: 50,
+    marginBottom: 50,
     backgroundColor: '#E9E9E9',
   },
   orderButton: {

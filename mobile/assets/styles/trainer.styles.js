@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    paddingBottom: 10,
     backgroundColor: '#f5f5f5',
   },
   header: {
