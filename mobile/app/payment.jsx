@@ -9,7 +9,7 @@ import { styles } from '../assets/styles/payment.styles';
 const API_URL = 'http://192.168.1.104:3000'; // Pastikan IP sesuai
 
 const paymentOptions = [
-  { key: 'Gopay', name: 'Gopay', logo: require('../assets/images/gopay-logo.png') },
+  { key: 'Gopay', name: 'Gopay', logo: require('../assets/images/gopay-logo.jpeg') },
   { key: 'Dana', name: 'Dana', logo: require('../assets/images/dana-logo.png') },
   { key: 'BRI', name: 'BRI', logo: require('../assets/images/bri-logo.png') },
 ];
