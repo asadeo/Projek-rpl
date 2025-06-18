@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity, Alert, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
@@ -26,7 +26,6 @@ const formatDate = (dateString, timeString) => {
       hour12: true,
     });
   } catch (e) {
-    console.error("Invalid date format:", e);
     return 'Invalid Date';
   }
 };
@@ -79,18 +78,17 @@ export default function OrderPage() {
   useEffect(() => {
     fetchSchedules();
   }, [trainer.id]);
-
+  
   const handleSelectSchedule = (scheduleItem) => {
     if (scheduleItem.is_booked) {
       Alert.alert('Sudah Dipesan', 'Jadwal ini tidak lagi tersedia.');
       return;
     }
-    
     router.push({
-      pathname: '/payment',
+      pathname: '/payment', // Halaman pembayaran yang kita buat sebelumnya
       params: { 
-        schedule: JSON.stringify(scheduleItem),
-        trainer: JSON.stringify(trainer)
+        schedule: JSON.stringify(scheduleItem), // Kirim objek jadwal
+        trainer: JSON.stringify(trainer)       // Kirim objek trainer
       }
     });
   };
