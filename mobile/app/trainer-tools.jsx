@@ -4,10 +4,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
-import { styles } from '../../assets/styles/trainer-tools.styles';
+import { styles } from '../assets/styles/trainer-tools.styles';
 
 // Pastikan alamat IP ini sesuai dengan alamat IP lokal backend Anda
-const API_URL = 'http://192.168.1.111:3000'; 
+const API_URL = 'http://192.168.1.103:3000'; 
 
 const formatRupiah = (amount) => {
   if (amount == null) return 'Rp 0';
@@ -77,7 +77,7 @@ export default function TrainerToolsPage() {
   const renderHistoryItem = ({ item }) => (
     <TouchableOpacity style={styles.logItem} onPress={() => handleNavigateToChat(item.user_id)}>
       <Image
-        source={require('../../assets/images/default-profile.png')}
+        source={require('../assets/images/default-profile.png')}
         style={styles.logAvatar}
       />
       <View style={styles.logTextContainer}>

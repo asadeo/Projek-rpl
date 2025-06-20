@@ -99,7 +99,7 @@ export default function TrainerPage() {
         <View style={styles.toolsContainer}>
           <TouchableOpacity 
             style={styles.trainerToolsButton} 
-            onPress={() => Alert.alert("Trainer Tools", "Halaman ini belum tersedia.")}
+            onPress={() => router.push('/trainer-tools')}
           >
             <Text style={styles.trainerToolsButtonText}>Trainer Tools</Text>
           </TouchableOpacity>
