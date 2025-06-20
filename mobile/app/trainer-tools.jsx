@@ -89,7 +89,7 @@ export default function TrainerToolsPage() {
   );
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.push('/trainer')} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="white" />
