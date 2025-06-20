@@ -25,8 +25,45 @@ export default function Page() {
     // );
 
 const onSignInPress = async () => {
+  setError(""); // Bersihkan error sebelumnya
+  
   if (!emailAddress || !password) {
-    setError("Please fill in all fields.");
+    setError("Email dan kata sandi tidak boleh kosong.");
+    return;
+  }
+
+  // Validasi format email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(emailAddress)) {
+    setError("Format email tidak valid.");
+    return;
+  }
+
+  // Validasi kekuatan kata sandi (contoh)
+  const minLength = 8;
+  const hasUppercase = /[A-Z]/.test(password);
+  const hasLowercase = /[a-z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+  if (password.length < minLength) {
+    setError(`Kata sandi minimal ${minLength} karakter.`);
+    return;
+  }
+  if (!hasUppercase) {
+    setError("Kata sandi harus mengandung setidaknya satu huruf kapital.");
+    return;
+  }
+  if (!hasLowercase) {
+    setError("Kata sandi harus mengandung setidaknya satu huruf kecil.");
+    return;
+  }
+  if (!hasNumber) {
+    setError("Kata sandi harus mengandung setidaknya satu angka.");
+    return;
+  }
+  if (!hasSpecialChar) {
+    setError("Kata sandi harus mengandung setidaknya satu karakter spesial (!@#$%^&*...).");
     return;
   }
 
@@ -127,7 +164,7 @@ const onSignInPress = async () => {
           <View style={styles.divider} />
         </View>
 
-        <TouchableOpacity style={styles.socialButton}>
+        <TouchableOpacity onPress={() => Alert.alert('Login Google', 'Fitur Login google akan datang!')} style={styles.socialButton}>
           <Image
             source={require("../../assets/images/google logo.jpg")} // pastikan ikon ada
             style={styles.socialIcon}
@@ -135,7 +172,7 @@ const onSignInPress = async () => {
         <Text style={styles.socialText}>Continue with Google</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.socialButton}>
+      <TouchableOpacity onPress={() => Alert.alert('Login Facebook', 'Fitur Login Facebook akan datang!')} style={styles.socialButton}>
         <Image
           source={require("../../assets/images/facebook logo.jpg")} // pastikan ikon ada
           style={styles.socialIcon}

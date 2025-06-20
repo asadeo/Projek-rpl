@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { styles } from '@/assets/styles/auth.styles.js';
 import { COLORS } from '../../constants/color';
 import { Ionicons } from "@expo/vector-icons";
-import { Image } from 'expo-image';
+import { Image } from 'expo-image'; // Menggunakan expo-image
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -19,20 +19,57 @@ export default function SignUpScreen() {
   const [loading, setLoading] = useState(false);
 
   const onSignUpPress = async () => {
-    if (!emailAddress || !password || !confirmPassword || !name) {
-      setError('Please fill in all fields.');
+    setError(''); // Bersihkan error sebelumnya
+
+    if (!name || !emailAddress || !password || !confirmPassword) {
+      setError('Harap isi semua kolom.');
       return;
     }
 
+    // Validasi format email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailAddress)) {
+      setError('Format email tidak valid.');
+      return;
+    }
+
+    // Validasi kekuatan kata sandi
+    const minLength = 8;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (password.length < minLength) {
+      setError(`Kata sandi minimal ${minLength} karakter.`);
+      return;
+    }
+    if (!hasUppercase) {
+      setError('Kata sandi harus mengandung setidaknya satu huruf kapital.');
+      return;
+    }
+    if (!hasLowercase) {
+      setError('Kata sandi harus mengandung setidaknya satu huruf kecil.');
+      return;
+    }
+    if (!hasNumber) {
+      setError('Kata sandi harus mengandung setidaknya satu angka.');
+      return;
+    }
+    if (!hasSpecialChar) {
+      setError('Kata sandi harus mengandung setidaknya satu karakter spesial (!@#$%^&*...).');
+      return;
+    }
+
+    // Validasi konfirmasi kata sandi
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError('Konfirmasi kata sandi tidak cocok.');
       return;
     }
 
     try {
       setLoading(true);
-      setError('');
-
+      
       const response = await fetch('http://192.168.1.103:3000/auth/register', {
         method: 'POST',
         headers: {
@@ -46,32 +83,35 @@ export default function SignUpScreen() {
       });
       
       let data;
+      try {
+        const text = await response.text();
+        data = JSON.parse(text);
+      } catch (e) {
+        console.error('Not JSON:', e);
+        setError('Invalid response format from server.');
+        return;
+      }
 
-    try {
-      const text = await response.text(); // Ambil respon sebagai text
-      data = JSON.parse(text); // Coba parse ke JSON
-    } catch (e) {
-      console.error('Not JSON:', e);
-     setError('Invalid response format from server.');
-      return;
+      if (!response.ok) {
+        setError(data.message || 'Sign up failed.');
+        return;
+      }
+
+      // Pastikan user_id dan role juga disimpan setelah registrasi sukses
+      // Asumsi backend mengembalikan user_id dan role setelah registrasi
+      await AsyncStorage.setItem('token', data.token);
+      await AsyncStorage.setItem('user_id', data.user_id.toString()); 
+      await AsyncStorage.setItem('role', data.role); 
+
+      Alert.alert('Sukses', 'Akun Anda berhasil dibuat.');
+      router.replace('/(tabs)/'); // Redirect ke halaman utama setelah sukses
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Terjadi kesalahan. Silakan coba lagi.');
+    } finally {
+      setLoading(false);
     }
-
-    if (!response.ok) {
-      setError(data.message || 'Sign up failed.');
-      return;
-    }
-
-    await AsyncStorage.setItem('token', data.token);
-
-    Alert.alert("Success", "Your account has been created.");
-    router.replace('/(tabs)/');
-  } catch (err) {
-    console.error(err);
-    setError('Something went wrong. Please try again.');
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <KeyboardAwareScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }} enableOnAndroid={true}>
