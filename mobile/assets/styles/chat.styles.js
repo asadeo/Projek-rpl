@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff', 
+    backgroundColor: '#fff',
   },
   // Header
   header: {
@@ -19,6 +19,11 @@ export const styles = StyleSheet.create({
   backButton: {
     padding: 10,
     marginRight: 8,
+  },
+    headerInfo: { // New style to group back button, image, and name
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1, // Allow this group to take up available space
   },
   headerImage: {
     width: 44,
@@ -47,20 +52,27 @@ export const styles = StyleSheet.create({
     maxWidth: '80%',
   },
   sent: {
-    backgroundColor: '#fff',
+    backgroundColor: '#DCF8C6', // Warna hijau muda khas pesan terkirim (contoh)
+    // Atau jika ingin mirip gambar "Oke", bisa gunakan: '#E0E0E0' atau '#D8D8D8'
+    // Mari kita pakai '#E0E0E0' untuk menyamakan dengan gambar "Oke"
+    // Tapi jika ingin beda dari received, '#DCF8C6' adalah pilihan umum
+    // Berdasarkan gambar, "Oke" terlihat seperti `#E0E0E0` atau sejenisnya
+    backgroundColor: '#E0E0E0',
     alignSelf: 'flex-end',
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderWidth: 0, // Hapus border jika ingin terlihat menyatu seperti di gambar
+    // borderColor: '#E0E0E0', // Tidak perlu jika borderWidth 0
   },
-  receivedText: {
-    backgroundColor: '#fff',
+  received: {
+    backgroundColor: '#FFFFFF', // Tetap putih sesuai gambar "Halo"
     alignSelf: 'flex-start',
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderWidth: 0, // Hapus border
+    // borderColor: '#E0E0E0', // Tidak perlu jika borderWidth 0
   },
   messageText: {
     fontSize: 16,
-    color: '#000',
+    color: '#000', // Warna teks default
+    // Pastikan warna teks untuk dikirim dan diterima tidak terlalu berbeda jika background sama
+    // Jika background berbeda, sentText/receivedText bisa disesuaikan
   },
   // Tombol Order & Input
   bottomContainer: {
@@ -97,5 +109,11 @@ export const styles = StyleSheet.create({
   sendButton: {
     marginLeft: 10,
     padding: 10,
+  },
+  headerIconsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 'auto', // PUSH to the rightmost end
+    gap: 20, // Menggunakan gap lagi, karena ini lebih modern. Jika tidak berfungsi, kembali ke marginRight.
   },
 });

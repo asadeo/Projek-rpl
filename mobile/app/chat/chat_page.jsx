@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  View, 
-  Text, 
-  TextInput, 
-  FlatList, 
-  Image, 
-  TouchableOpacity, 
-  ActivityIndicator, 
-  KeyboardAvoidingView, 
-  Platform, 
-  Alert 
+import {
+  View,
+  Text,
+  TextInput,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  Alert
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { styles } from '../../assets/styles/chat.styles';
+import { styles } from '../../assets/styles/chat.styles'; // Pastikan ini diimpor
 
 const API_URL = 'http://192.168.1.103:3000'; // Pastikan IP Address ini benar
 
@@ -23,7 +23,7 @@ export default function ChatPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   // Ambil semua params yang dibutuhkan dari navigasi
-  const { id: trainerId, name, profile_picture_url, price } = params; 
+  const { id: trainerId, name, profile_picture_url, price } = params;
 
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -40,7 +40,7 @@ export default function ChatPage() {
         return;
       }
       setUserId(parseInt(storedUserId, 10));
-      
+
       const response = await fetch(`${API_URL}/auth/messages/${trainerId}`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
@@ -58,7 +58,7 @@ export default function ChatPage() {
     const interval = setInterval(fetchMessages, 5000);
     return () => clearInterval(interval);
   }, [trainerId]);
-  
+
   const handleSend = async () => {
     if (text.trim().length === 0) return;
     const messageContent = text;
@@ -89,21 +89,34 @@ export default function ChatPage() {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }} edges={[ 'left', 'right']}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }} edges={['bottom', 'left', 'right']}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === "android" ? "height" : "height"}
-        keyboardVerticalOffset={Platform.OS === 'android' ? 20 : 0}
+        behavior={Platform.OS === "android" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "android" ? 20 : 0} 
         style={styles.container}
       >
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.push('/(tabs)/trainer')} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#333" />
-          </TouchableOpacity>
-          <Image
-            source={{ uri: `${API_URL}${profile_picture_url}` }}
-            style={styles.headerImage}
-          />
-          <Text style={styles.headerName}>{name}</Text>
+          {/* Grupkan backButton, image, dan name */}
+          <View style={styles.headerInfo}> 
+            <TouchableOpacity onPress={() => router.push('/(tabs)/trainer')} style={styles.backButton}>
+              <Ionicons name="arrow-back" size={24} color="#333" />
+            </TouchableOpacity>
+            <Image
+              source={{ uri: `${API_URL}${profile_picture_url}` }}
+              style={styles.headerImage}
+            />
+            <Text style={styles.headerName}>{name}</Text>
+          </View>
+          
+          {/* Container untuk ikon telepon dan video call */}
+          <View style={styles.headerIconsContainer}>
+            <TouchableOpacity onPress={() => Alert.alert('Call', 'Memulai panggilan suara...')}>
+              <Ionicons name="call-outline" size={24} color="#333" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => Alert.alert('Video Call', 'Memulai panggilan video...')}>
+              <Ionicons name="videocam-outline" size={24} color="#333" />
+            </TouchableOpacity>
+          </View>
         </View>
 
         <View style={styles.content}>
@@ -121,14 +134,13 @@ export default function ChatPage() {
             />
           )}
         </View>
-        
+
         <View style={styles.bottomContainer}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.orderButton}
-            onPress={() => router.push({ 
-              // --- PERBAIKAN NAVIGASI DI SINI ---
-              pathname: `/order/${trainerId}`, 
-              params: { name, profile_picture_url, price } // Kirim params tanpa duplikat 'id'
+            onPress={() => router.push({
+              pathname: `/order/${trainerId}`,
+              params: { name, profile_picture_url, price }
             })}
           >
             <Text style={styles.orderButtonText}>Order Trainer</Text>
