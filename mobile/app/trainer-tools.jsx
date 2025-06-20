@@ -113,7 +113,8 @@ export default function TrainerToolsPage() {
 
               <TouchableOpacity
                 style={styles.actionCard}
-                onPress={() => Alert.alert("Coming Soon", "Fitur atur jadwal akan segera hadir!")}
+                // --- UBAH BARIS INI ---
+                onPress={() => router.push('/set-schedule')}
               >
                 <Ionicons name="calendar-outline" size={28} color="#0d1b2a" />
                 <Text style={styles.actionCardText}>Atur Jadwal</Text>
