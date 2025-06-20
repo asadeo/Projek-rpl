@@ -6,10 +6,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 // --- PERUBAHAN DI SINI: Impor style dari file terpisah ---
-import { styles } from '../../assets/styles/set-schedule.styles';
+import { styles } from '../assets/styles/set-schedule.styles';
 
 
-const API_URL = 'http://192.168.1.111:3000'; 
+const API_URL = 'http://192.168.1.103:3000'; 
 
 export default function SetSchedulePage() {
   const router = useRouter();
