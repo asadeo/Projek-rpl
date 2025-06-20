@@ -3,18 +3,11 @@ import { View, Text, FlatList, Image, TouchableOpacity, Alert, ActivityIndicator
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
-// Pastikan useSafeAreaInsets diimpor
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'; 
-// Pastikan styles diimpor dari file terpisah (assets/styles/order.styles.js)
 import { styles } from '../../assets/styles/order.styles';
-import { Background } from '@react-navigation/elements';
 
-// !!! PENTING: Pastikan alamat IP ini sesuai dengan alamat IP lokal backend Anda
 const API_URL = 'http://192.168.1.103:3000'; 
 
-/**
- * Fungsi untuk memformat tanggal dan waktu agar lebih mudah dibaca.
- */
 const formatDate = (dateString, timeString) => {
   try {
     const date = new Date(`${dateString.split('T')[0]}T${timeString}`);
@@ -42,7 +35,6 @@ export default function OrderPage() {
   const insets = useSafeAreaInsets(); 
 
   const fetchSchedules = async () => {
-    // Pastikan trainer.id ada sebelum melakukan fetch
     if (!trainer?.id) {
         Alert.alert("Error", "Trainer ID tidak ditemukan.");
         setLoading(false);
@@ -52,13 +44,10 @@ export default function OrderPage() {
     try {
       const token = await AsyncStorage.getItem('token');
       if (!token) {
-        // Jika tidak ada token, arahkan kembali ke halaman sign-in
         router.replace('/(auth)/sign-in');
         return;
       }
       
-      // --- PERBAIKAN 1: URL ENDPOINT ---
-      // Endpoint diubah menjadi '/auth/trainer/schedule/' sesuai perbaikan backend sebelumnya.
       const response = await fetch(`${API_URL}/auth/trainer/schedule/${trainer.id}`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
@@ -76,8 +65,6 @@ export default function OrderPage() {
     }
   };
 
-  // --- PERBAIKAN 2: DEPENDENCY USEEFFECT ---
-  // Menambahkan trainer.id sebagai dependency agar data di-fetch ulang jika ID trainer berubah.
   useEffect(() => {
     fetchSchedules();
   }, [trainer.id]);
@@ -107,14 +94,12 @@ export default function OrderPage() {
     </TouchableOpacity>
   );
 
-  // --- PERBAIKAN 3: URL GAMBAR & FALLBACK ---
   // Membentuk URL gambar dengan benar dan memberikan gambar placeholder jika tidak ada.
   const profilePictureUrl = trainer.profile_picture_url
     ? `${API_URL}${trainer.profile_picture_url}`
     : 'https://via.placeholder.com/80';
 
   return (
-    // SafeAreaView untuk menangani area status bar, menyesuaikan warna dengan header
     <SafeAreaView style={styles.container} edges={['bottom']} backgroundColor={styles.header.backgroundColor}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>

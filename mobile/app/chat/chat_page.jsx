@@ -89,9 +89,10 @@ export default function ChatPage() {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }} edges={['top', 'left', 'right']}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }} edges={[ 'left', 'right']}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === "android" ? "padding" : "height"}
+        behavior={Platform.OS === "android" ? "height" : "height"}
+        keyboardVerticalOffset={Platform.OS === 'android' ? 20 : 0}
         style={styles.container}
       >
         <View style={styles.header}>
@@ -137,7 +138,7 @@ export default function ChatPage() {
               style={styles.input}
               value={text}
               onChangeText={setText}
-              placeholder="Ask anything..."
+              placeholder="Message"
             />
             <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
               <Ionicons name="send" size={24} color="#0d1b2a" />

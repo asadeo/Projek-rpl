@@ -52,7 +52,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E0E0E0',
   },
-  received: {
+  receivedText: {
     backgroundColor: '#fff',
     alignSelf: 'flex-start',
     borderWidth: 1,
@@ -69,7 +69,7 @@ export const styles = StyleSheet.create({
   },
   orderButton: {
     alignSelf: 'flex-start',
-    backgroundColor: '#fff',
+    backgroundColor: '#123459',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
@@ -78,7 +78,7 @@ export const styles = StyleSheet.create({
     marginBottom: 10,
   },
   orderButtonText: {
-    color: '#0d1b2a',
+    color: '#fff',
     fontWeight: '600',
   },
   inputContainer: {
