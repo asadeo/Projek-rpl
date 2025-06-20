@@ -3,9 +3,11 @@ import { View, Text, FlatList, Image, TouchableOpacity, Alert, ActivityIndicator
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
-// Impor style terpisah agar kode lebih rapi
-// import { styles } from '../../assets/styles/order.styles';
+// Pastikan useSafeAreaInsets diimpor
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'; 
+// Pastikan styles diimpor dari file terpisah (assets/styles/order.styles.js)
+import { styles } from '../../assets/styles/order.styles';
+import { Background } from '@react-navigation/elements';
 
 // !!! PENTING: Pastikan alamat IP ini sesuai dengan alamat IP lokal backend Anda
 const API_URL = 'http://192.168.1.103:3000'; 
@@ -37,6 +39,7 @@ export default function OrderPage() {
 
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
+  const insets = useSafeAreaInsets(); 
 
   const fetchSchedules = async () => {
     // Pastikan trainer.id ada sebelum melakukan fetch
@@ -111,81 +114,53 @@ export default function OrderPage() {
     : 'https://via.placeholder.com/80';
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#333" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Order a Consultation Schedule</Text>
-      </View>
-
-      {loading ? (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#0d1b2a" />
+    // SafeAreaView untuk menangani area status bar, menyesuaikan warna dengan header
+    <SafeAreaView style={styles.container} edges={['bottom']} backgroundColor={styles.header.backgroundColor}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Order a Consultation Schedule</Text>
         </View>
-      ) : (
-        <FlatList
-          data={schedules}
-          renderItem={renderScheduleItem}
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={styles.listContainer}
-          ListHeaderComponent={
-            <View style={styles.trainerCard}>
-              <Image 
-                source={{ uri: profilePictureUrl }} 
-                style={styles.trainerImage} 
-              />
-              <View>
-                <Text style={styles.trainerName}>{trainer.name || 'Nama Trainer'}</Text>
-              </View>
-            </View>
-          }
-          ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>Trainer ini belum memiliki jadwal.</Text>
-            </View>
-          }
-        />
-      )}
+
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#123459" />
+            <Text style={{ color: '#123459', marginTop: 10 }}>Loading schedules...</Text>
+          </View>
+        ) : (
+          // Wrapper View baru untuk kartu konten utama (trainer dan daftar jadwal)
+          <View style={styles.mainContentCard}>
+            <FlatList
+              data={schedules}
+              renderItem={renderScheduleItem}
+              keyExtractor={(item) => item.id.toString()}
+              // Menggunakan nama gaya baru untuk contentContainerStyle
+              contentContainerStyle={styles.listContentContainer} 
+              ListHeaderComponent={
+                <View style={styles.trainerCard}>
+                  <Image 
+                    source={{ uri: profilePictureUrl }} 
+                    style={styles.trainerImage} 
+                  />
+                  <View>
+                    <Text style={styles.trainerName}>
+                      {trainer.name || 'Nama Trainer'}
+                    </Text>
+                  </View>
+                </View>
+              }
+              ListEmptyComponent={
+                <View style={styles.emptyContainer}>
+                  <Text style={styles.emptyText}>Trainer ini belum memiliki jadwal.</Text>
+                  <TouchableOpacity onPress={() => router.back()} style={styles.goBackButton}>
+                    <Text style={styles.goBackText}>Kembali ke Home</Text>
+                  </TouchableOpacity>
+                </View>
+              }
+            />
+          </View>
+        )}
     </SafeAreaView>
   );
 }
-
-// Menambahkan StyleSheet langsung di sini agar file menjadi mandiri
-const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#f0f2f5' },
-    header: { flexDirection: 'row', alignItems: 'center', padding: 15, backgroundColor: '#fff', borderBottomWidth: 1, borderBottomColor: '#ddd' },
-    backButton: { marginRight: 15 },
-    headerTitle: { fontSize: 20, fontWeight: 'bold', color: '#333' },
-    loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-    listContainer: { paddingHorizontal: 20, paddingTop: 10 },
-    trainerCard: {
-        backgroundColor: 'white',
-        borderRadius: 8,
-        padding: 16,
-        marginBottom: 20,
-        flexDirection: 'row',
-        alignItems: 'center',
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3.84,
-        elevation: 5,
-    },
-    trainerImage: { width: 60, height: 60, borderRadius: 30, marginRight: 15 },
-    trainerName: { fontSize: 18, fontWeight: 'bold', color: '#333' },
-    scheduleItem: {
-        backgroundColor: 'white',
-        padding: 15,
-        borderRadius: 8,
-        marginBottom: 10,
-        borderWidth: 1,
-        borderColor: '#eee'
-    },
-    scheduleTime: { fontSize: 16, fontWeight: '500' },
-    scheduleStatus: { marginTop: 5 },
-    statusBooked: { color: 'red', fontWeight: 'bold' },
-    statusEmpty: { color: 'green' },
-    emptyContainer: { alignItems: 'center', marginTop: 50 },
-    emptyText: { fontSize: 16, color: 'gray' }
-});
