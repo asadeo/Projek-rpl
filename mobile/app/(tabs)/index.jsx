@@ -34,7 +34,7 @@ export default function Page() {
   }
 
   try {
-    const res = await fetch(`http://192.168.1.111:3000/auth/profile`, {
+    const res = await fetch(`http://192.168.1.103:3000/auth/profile`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 

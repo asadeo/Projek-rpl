@@ -6,7 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 
 // Make sure this IP address is correct for your local network.
-const API_URL = 'http://192.168.1.111:3000'; 
+const API_URL = 'http://192.168.1.103:3000'; 
 
 export default function ProfilePage() {
   const router = useRouter();

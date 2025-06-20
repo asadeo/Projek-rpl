@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { styles as originalStyles } from '../../assets/styles/trainer.styles';
 
-const API_URL = 'http://192.168.1.111:3000'; 
+const API_URL = 'http://192.168.1.103:3000'; 
 
 const TrainerCard = ({ trainer, router }) => {
   const imageUrl = trainer.profile_picture_url 

@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 // import { styles } from '../../assets/styles/order.styles';
 
 // !!! PENTING: Pastikan alamat IP ini sesuai dengan alamat IP lokal backend Anda
-const API_URL = 'http://192.168.1.111:3000'; 
+const API_URL = 'http://192.168.1.103:3000'; 
 
 /**
  * Fungsi untuk memformat tanggal dan waktu agar lebih mudah dibaca.
