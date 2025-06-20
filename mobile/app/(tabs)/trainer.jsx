@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
-import { styles as originalStyles } from '../../assets/styles/trainer.styles';
+import { styles } from '../../assets/styles/trainer.styles';
 
 const API_URL = 'http://192.168.1.103:3000'; 
 
@@ -21,17 +21,17 @@ const TrainerCard = ({ trainer, router }) => {
   };
 
   return (
-    <View style={originalStyles.card}>
-      <Image source={imageUrl} style={originalStyles.cardImage} />
-      <View style={originalStyles.cardBody}>
-        <Text style={originalStyles.name}>{trainer.name}</Text>
-        <Text style={originalStyles.title}>{trainer.education}</Text>
-        <Text style={originalStyles.experience}>{trainer.experience_years} years experience</Text>
-        <View style={originalStyles.footer}>
-          <Text style={originalStyles.price}>Rp {parseInt(trainer.price || 0).toLocaleString('id-ID')}</Text>
+    <View style={styles.card}>
+      <Image source={imageUrl} style={styles.cardImage} />
+      <View style={styles.cardBody}>
+        <Text style={styles.name}>{trainer.name}</Text>
+        <Text style={styles.title}>{trainer.education}</Text>
+        <Text style={styles.experience}>{trainer.experience_years} years experience</Text>
+        <View style={styles.footer}>
+          <Text style={styles.price}>Rp {parseInt(trainer.price || 0).toLocaleString('id-ID')}</Text>
         </View>
       </View>
-      <TouchableOpacity style={originalStyles.chatButton} onPress={handleChatPress}>
+      <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
         <Ionicons name="chatbubble-ellipses-outline" size={24} color="#888" />
       </TouchableOpacity>
     </View>
@@ -124,35 +124,3 @@ export default function TrainerPage() {
     </SafeAreaView>
   );
 }
-
-// Menggabungkan style lama dengan style baru untuk tombol
-const styles = StyleSheet.create({
-  ...originalStyles,
-  toolsContainer: {
-    paddingHorizontal: 24,
-    paddingTop: 16,
-    paddingBottom: 0,
-  },
-  trainerToolsButton: {
-    backgroundColor: '#e2e8f0', // Warna abu-abu muda
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  trainerToolsButtonText: {
-    color: '#1a202c', // Warna teks gelap
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  emptyContainer: {
-    flex: 1,
-    marginTop: 50,
-    alignItems: 'center',
-  },
-  emptyText: {
-    fontSize: 16,
-    color: '#666',
-  }
-});

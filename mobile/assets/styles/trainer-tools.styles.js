@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: '#f0f2f5' },
     header: {
-        backgroundColor: '#0d1b2a',
+        backgroundColor: '#123459',
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: 15,
@@ -17,14 +17,14 @@ export const styles = StyleSheet.create({
         marginLeft: 15,
     },
     earningsCard: {
-        backgroundColor: '#0d1b2a',
+        backgroundColor: '#123459',
         borderRadius: 12,
         padding: 20,
         marginHorizontal: 16,
         marginTop: 16,
     },
     earningsLabel: {
-        color: '#a0aec0',
+        color: '#fff',
         fontSize: 16,
     },
     earningsAmount: {

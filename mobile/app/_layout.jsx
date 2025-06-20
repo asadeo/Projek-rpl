@@ -7,14 +7,15 @@ import * as NavigationBar from 'expo-navigation-bar';
 
 export default function RootLayout() {
   const [loading, setLoading] = useState(true);
-  const [hasSeenOnboarding, setHasSeenOnboarding] = useState(true);
+  const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);//coba onboarding
   const pathname = usePathname();
 
   useEffect(() => {
     const checkOnboarding = async () => {
-      const seen = await AsyncStorage.getItem("hasSeenOnboarding");
-      console.log("HAS SEEN ONBOARDING:", seen);
-      setHasSeenOnboarding(seen === "true");
+      // const seen = await AsyncStorage.getItem("hasSeenOnboarding");
+      // console.log("HAS SEEN ONBOARDING:", seen);
+      // setHasSeenOnboarding(seen === "true");
+      setHasSeenOnboarding(false);
       setLoading(false);
     };
     checkOnboarding();

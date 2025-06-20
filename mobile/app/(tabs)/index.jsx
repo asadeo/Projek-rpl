@@ -126,7 +126,7 @@ export default function Page() {
         <MenuItem
           image={require('@/assets/images/trainWithExpert.png')}
           title="Train with Expert"
-          onPress={() => router.push('/profile')}
+          onPress={() => router.push('/trainer')}
         />
         <MenuItem
           image={require('@/assets/images/chatBot.png')}

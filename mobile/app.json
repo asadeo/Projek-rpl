@@ -40,7 +40,8 @@
         {
           "visible": "hidden"
         }
-      ]
+      ],
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true

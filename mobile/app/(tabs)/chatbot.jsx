@@ -90,7 +90,7 @@ export default function ChatbotPage() {
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === 'android' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'android' ? 0 : 20} // Sesuaikan offset jika perlu
+      keyboardVerticalOffset={Platform.OS === 'android' ? 30 : 0} // Sesuaikan offset jika perlu
     >
       <View style={styles.container}>
         {/* Header Judul */}

@@ -34,7 +34,7 @@ export default function TrainingPage() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={"top"}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Train Yourself With The Right Movements</Text>
       </View>

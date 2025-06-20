@@ -35,7 +35,7 @@ export default function ChestPage() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom', 'top' ]}>
       <View style={[styles.header, { flexDirection: 'row', alignItems: 'center' }]}>
         <TouchableOpacity onPress={() => router.back()} style={{ marginRight: 16 }}>
           <Ionicons name="arrow-back" size={24} color="#333" />

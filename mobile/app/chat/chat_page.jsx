@@ -98,7 +98,7 @@ export default function ChatPage() {
         <View style={styles.header}>
           {/* Grupkan backButton, image, dan name */}
           <View style={styles.headerInfo}> 
-            <TouchableOpacity onPress={() => router.push('/(tabs)/trainer')} style={styles.backButton}>
+            <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
               <Ionicons name="arrow-back" size={24} color="#333" />
             </TouchableOpacity>
             <Image

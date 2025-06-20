@@ -42,7 +42,26 @@ export default function TrainerToolsPage() {
       const historyData = await historyRes.json();
 
       setWallet(walletData.trainer_wallet || 0);
-      setHistory(historyData);
+      const enrichedHistory = await Promise.all(
+        historyData.map(async (item) => {
+          try {
+            const profileRes = await fetch(`${API_URL}/auth/profile-by-id/${item.user_id}`, {
+              headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (!profileRes.ok) {
+              console.warn(`Failed to fetch profile for user_id: ${item.user_id}`);
+              return { ...item, profile_picture_url: null }; // Fallback if fetch fails
+            }
+            const userProfile = await profileRes.json();
+            return { ...item, profile_picture_url: userProfile.profile_picture_url };
+          } catch (profileError) {
+            console.error(`Error fetching profile for user_id ${item.user_id}:`, profileError);
+            return { ...item, profile_picture_url: null }; // Ensure profile_picture_url is set to null on error
+          }
+        })
+      );
+      setHistory(enrichedHistory);
+
     } catch (error) {
       Alert.alert('Error', 'Tidak dapat memuat data: ' + error.message);
     } finally {
@@ -66,8 +85,12 @@ export default function TrainerToolsPage() {
         
         const userProfile = await response.json();
         router.push({
-            pathname: `/chat/${userProfile.id}`,
-            params: { ...userProfile }
+            pathname: `/chat/chat_page`,
+            params: {
+                id: userProfile.id, // ID pengguna yang akan diajak chat (digunakan sebagai trainerId di chat_page)
+                name: userProfile.name,
+                profile_picture_url: userProfile.profile_picture_url,
+              }
         });
     } catch (error) {
         Alert.alert('Error', error.message);
@@ -77,7 +100,9 @@ export default function TrainerToolsPage() {
   const renderHistoryItem = ({ item }) => (
     <TouchableOpacity style={styles.logItem} onPress={() => handleNavigateToChat(item.user_id)}>
       <Image
-        source={require('../assets/images/default-profile.png')}
+        source={item.profile_picture_url 
+                  ? { uri: `${API_URL}${item.profile_picture_url}` } 
+                  : require('../assets/images/default-profile.png')}
         style={styles.logAvatar}
       />
       <View style={styles.logTextContainer}>

@@ -62,7 +62,7 @@ export default function PaymentPage() {
   const total = subtotal + serviceFee;
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+    <SafeAreaView style={styles.container} edges={['bottom', 'left', 'right']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="#333" />

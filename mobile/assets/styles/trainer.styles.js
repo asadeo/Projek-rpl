@@ -83,4 +83,31 @@ export const styles = StyleSheet.create({
     marginLeft: 16,
     padding: 8,
   },
+    toolsContainer: {
+    paddingHorizontal: 24,
+    paddingTop: 16,
+    paddingBottom: 0,
+  },
+  trainerToolsButton: {
+    backgroundColor: '#123459', // Warna abu-abu muda
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  trainerToolsButtonText: {
+    color: '#fff', // Warna teks gelap
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  emptyContainer: {
+    flex: 1,
+    marginTop: 50,
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#666',
+  }
 });
