@@ -70,7 +70,7 @@ export default function SignUpScreen() {
     try {
       setLoading(true);
       
-      const response = await fetch('http://192.168.1.103:3000/auth/register', {
+      const response = await fetch('http://192.168.1.49:3000/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -97,11 +97,7 @@ export default function SignUpScreen() {
         return;
       }
 
-      // Pastikan user_id dan role juga disimpan setelah registrasi sukses
-      // Asumsi backend mengembalikan user_id dan role setelah registrasi
       await AsyncStorage.setItem('token', data.token);
-      await AsyncStorage.setItem('user_id', data.user_id.toString()); 
-      await AsyncStorage.setItem('role', data.role); 
 
       Alert.alert('Sukses', 'Akun Anda berhasil dibuat.');
       router.replace('/(tabs)/'); // Redirect ke halaman utama setelah sukses

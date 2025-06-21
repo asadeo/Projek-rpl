@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'; 
 import { styles } from '../../assets/styles/order.styles';
 
-const API_URL = 'http://192.168.1.103:3000'; 
+const API_URL = 'http://192.168.1.49:3000'; 
 
 const formatDate = (dateString, timeString) => {
   try {

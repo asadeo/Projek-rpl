@@ -9,7 +9,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { styles } from '../assets/styles/set-schedule.styles';
 
 
-const API_URL = 'http://192.168.1.103:3000'; 
+const API_URL = 'http://192.168.1.49:3000'; 
 
 export default function SetSchedulePage() {
   const router = useRouter();

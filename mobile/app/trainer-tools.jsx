@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { styles } from '../assets/styles/trainer-tools.styles';
 
 // Pastikan alamat IP ini sesuai dengan alamat IP lokal backend Anda
-const API_URL = 'http://192.168.1.103:3000'; 
+const API_URL = 'http://192.168.1.49:3000'; 
 
 const formatRupiah = (amount) => {
   if (amount == null) return 'Rp 0';

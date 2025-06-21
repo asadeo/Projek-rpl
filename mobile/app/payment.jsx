@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from '../assets/styles/payment.styles';
 
-const API_URL = 'http://192.168.1.103:3000'; // Pastikan IP sesuai
+const API_URL = 'http://192.168.1.49:3000'; // Pastikan IP sesuai
 
 const paymentOptions = [
   { key: 'Gopay', name: 'Gopay', logo: require('../assets/images/gopay-logo.jpeg') },
