@@ -41,7 +41,7 @@ export default function RegisterTrainer() {
       }
 
       Alert.alert("Success", "Berhasil mendaftar sebagai trainer!");
-      router.back(); // Go back to profile page
+      router.back(); 
     } catch (err) {
       Alert.alert("Registration Failed", err.message);
     } finally {

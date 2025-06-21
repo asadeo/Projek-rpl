@@ -5,7 +5,6 @@ import { useRouter, useFocusEffect } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 
-// Make sure this IP address is correct for your local network.
 const API_URL = 'http://192.168.1.49:3000'; 
 
 export default function ProfilePage() {
@@ -13,7 +12,6 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch profile data every time the screen is focused
   useFocusEffect(
     React.useCallback(() => {
       const getProfile = async () => {
@@ -30,7 +28,6 @@ export default function ProfilePage() {
           });
 
           if (!res.ok) {
-            // If the token is invalid, sign out the user
             if (res.status === 401 || res.status === 403) {
               await handleSignOut();
             }
@@ -97,7 +94,6 @@ export default function ProfilePage() {
         const resData = await res.json();
         if (res.ok) {
           Alert.alert("Success", "Foto profil berhasil diupload!");
-          // Update profile picture URL in state to reflect change immediately
           setProfile(prev => ({ ...prev, profile_picture_url: resData.url }));
         } else {
           throw new Error(resData.message || "Gagal mengupload gambar");

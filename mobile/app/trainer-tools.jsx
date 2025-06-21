@@ -6,7 +6,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from '../assets/styles/trainer-tools.styles';
 
-// Pastikan alamat IP ini sesuai dengan alamat IP lokal backend Anda
 const API_URL = 'http://192.168.1.49:3000'; 
 
 const formatRupiah = (amount) => {
@@ -50,13 +49,13 @@ export default function TrainerToolsPage() {
             });
             if (!profileRes.ok) {
               console.warn(`Failed to fetch profile for user_id: ${item.user_id}`);
-              return { ...item, profile_picture_url: null }; // Fallback if fetch fails
+              return { ...item, profile_picture_url: null }; 
             }
             const userProfile = await profileRes.json();
             return { ...item, profile_picture_url: userProfile.profile_picture_url };
           } catch (profileError) {
             console.error(`Error fetching profile for user_id ${item.user_id}:`, profileError);
-            return { ...item, profile_picture_url: null }; // Ensure profile_picture_url is set to null on error
+            return { ...item, profile_picture_url: null }; 
           }
         })
       );
@@ -87,7 +86,7 @@ export default function TrainerToolsPage() {
         router.push({
             pathname: `/chat/chat_page`,
             params: {
-                id: userProfile.id, // ID pengguna yang akan diajak chat (digunakan sebagai trainerId di chat_page)
+                id: userProfile.id, 
                 name: userProfile.name,
                 profile_picture_url: userProfile.profile_picture_url,
               }

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-// MODIFIKASI 1: Impor KeyboardAvoidingView dan Platform
 import { View, TextInput, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { styles } from "@/assets/styles/chatbot.styles.js";
 import axios from 'axios';
@@ -45,13 +44,12 @@ export default function ChatbotPage() {
     loadUser();
   }, []);
 
-  // ... (fungsi useEffect, sendMessage, dll. tetap sama)
   const sendMessage = async (messageText = userInput) => {
     if (!messageText.trim()) return;
 
     const newMessages = [...currentChat, { role: 'user', content: messageText }];
     setCurrentChat([...newMessages, { role: 'assistant', content: '...' }]);
-    setUserInput(''); // Selalu kosongkan input field
+    setUserInput(''); 
 
     try {
       const res = await axios.post(API_URL, {
@@ -86,11 +84,10 @@ export default function ChatbotPage() {
   
 
   return (
-    // MODIFIKASI 2: Bungkus semuanya dengan KeyboardAvoidingView
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === 'android' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'android' ? 30 : 0} // Sesuaikan offset jika perlu
+      keyboardVerticalOffset={Platform.OS === 'android' ? 30 : 0} 
     >
       <View style={styles.container}>
         {/* Header Judul */}
@@ -102,7 +99,6 @@ export default function ChatbotPage() {
         {/* Konten Utama */}
         {isNewChat ? (
           <View style={styles.welcomeContainer}>
-            {/* ... (kode welcome screen tetap sama) ... */}
             <Text style={styles.welcomeText}>
               Hello, {name}! How can I help you today? Please type whatever you want to ask me.
             </Text>
@@ -119,7 +115,6 @@ export default function ChatbotPage() {
             onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
             style={styles.chatContainer}
           >
-            {/* ... (kode riwayat chat tetap sama) ... */}
              {currentChat.slice(1).map((msg, index) => (
                 <View key={index} style={[styles.message, msg.role === 'user' ? styles.user : styles.bot]}>
                   <Text style={styles.messageText}>{msg.content}</Text>
@@ -130,7 +125,6 @@ export default function ChatbotPage() {
 
         {/* Area Input */}
         <View style={styles.inputContainer}>
-          {/* ... (kode input field tetap sama) ... */}
           <TextInput
               style={styles.input}
               value={userInput}

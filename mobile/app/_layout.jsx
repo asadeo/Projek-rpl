@@ -7,7 +7,7 @@ import * as NavigationBar from 'expo-navigation-bar';
 
 export default function RootLayout() {
   const [loading, setLoading] = useState(true);
-  const [hasSeenOnboarding, setHasSeenOnboarding] = useState(true);//coba onboarding
+  const [hasSeenOnboarding, setHasSeenOnboarding] = useState(true);
   const pathname = usePathname();
 
   useEffect(() => {

@@ -75,10 +75,10 @@ export default function OrderPage() {
       return;
     }
     router.push({
-      pathname: '/payment', // Halaman pembayaran yang kita buat sebelumnya
+      pathname: '/payment', 
       params: { 
-        schedule: JSON.stringify(scheduleItem), // Kirim objek jadwal
-        trainer: JSON.stringify(trainer)       // Kirim objek trainer
+        schedule: JSON.stringify(scheduleItem), 
+        trainer: JSON.stringify(trainer)       
       }
     });
   };
@@ -94,7 +94,6 @@ export default function OrderPage() {
     </TouchableOpacity>
   );
 
-  // Membentuk URL gambar dengan benar dan memberikan gambar placeholder jika tidak ada.
   const profilePictureUrl = trainer.profile_picture_url
     ? `${API_URL}${trainer.profile_picture_url}`
     : 'https://via.placeholder.com/80';
@@ -114,13 +113,11 @@ export default function OrderPage() {
             <Text style={{ color: '#123459', marginTop: 10 }}>Loading schedules...</Text>
           </View>
         ) : (
-          // Wrapper View baru untuk kartu konten utama (trainer dan daftar jadwal)
           <View style={styles.mainContentCard}>
             <FlatList
               data={schedules}
               renderItem={renderScheduleItem}
               keyExtractor={(item) => item.id.toString()}
-              // Menggunakan nama gaya baru untuk contentContainerStyle
               contentContainerStyle={styles.listContentContainer} 
               ListHeaderComponent={
                 <View style={styles.trainerCard}>

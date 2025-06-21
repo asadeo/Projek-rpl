@@ -3,7 +3,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { styles } from '../../assets/styles/training.styles';
 
-// Data lengkap untuk semua kategori latihan
 const trainingCategories = [
   { id: '1', title: 'Chest', image: require('../../assets/images/chest-workout.png') },
   { id: '2', title: 'Tricep', image: require('../../assets/images/tricep-workout.png') },
@@ -25,10 +24,8 @@ export default function TrainingPage() {
 
   const handlePress = (item) => {
     if (item.id === '1') {
-      // Hanya navigasi untuk 'Chest' yang aktif
       router.push('/training/chest');
     } else {
-      // Tampilkan pesan untuk kategori lainnya
       Alert.alert("Segera Hadir", `Halaman untuk ${item.title} belum tersedia.`);
     }
   };

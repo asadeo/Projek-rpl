@@ -65,7 +65,7 @@ export default function Page() {
     router.replace('/(auth)/sign-in');
   };
 
-  if (loading) return null; // Bisa ganti dengan <ActivityIndicator />
+  if (loading) return null; 
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

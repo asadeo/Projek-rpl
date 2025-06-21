@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from '../assets/styles/payment.styles';
 
-const API_URL = 'http://192.168.1.49:3000'; // Pastikan IP sesuai
+const API_URL = 'http://192.168.1.49:3000'; 
 
 const paymentOptions = [
   { key: 'Gopay', name: 'Gopay', logo: require('../assets/images/gopay-logo.jpeg') },
@@ -19,7 +19,6 @@ export default function PaymentPage() {
   const params = useLocalSearchParams();
   const { schedule: scheduleString, trainer: trainerString } = params;
 
-  // Parse data yang dikirim dari halaman sebelumnya
   const schedule = JSON.parse(scheduleString);
   const trainer = JSON.parse(trainerString);
 
@@ -47,7 +46,7 @@ export default function PaymentPage() {
               }
               
               Alert.alert('Booking Berhasil', 'Jadwal konsultasi Anda telah dikonfirmasi!');
-              router.replace('/(tabs)/trainer'); // Kembali ke daftar trainer
+              router.replace('/(tabs)/trainer'); 
             } catch (error) {
               Alert.alert('Error', error.message);
             }

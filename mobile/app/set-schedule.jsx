@@ -5,7 +5,6 @@ import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
-// --- PERUBAHAN DI SINI: Impor style dari file terpisah ---
 import { styles } from '../assets/styles/set-schedule.styles';
 
 

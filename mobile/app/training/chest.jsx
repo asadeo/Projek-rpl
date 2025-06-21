@@ -5,7 +5,6 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from '../../assets/styles/training.styles'; 
 
-// --- MODIFIKASI: Menambahkan data latihan baru ---
 const chestExercises = [
   { id: '1', title: 'Bench Press', image: require('../../assets/images/bench-press.png') },
   { id: '2', title: 'Chest Fly', image: require('../../assets/images/chest-fly.png') },
@@ -26,7 +25,6 @@ export default function ChestPage() {
   const router = useRouter();
 
   const handlePress = (item) => {
-    // Hanya item pertama (Bench Press) yang akan menavigasi
     if (item.id === '1') {
         router.push('/training/bench-press');
     } else {

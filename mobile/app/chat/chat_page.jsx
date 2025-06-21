@@ -15,14 +15,13 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { styles } from '../../assets/styles/chat.styles'; // Pastikan ini diimpor
+import { styles } from '../../assets/styles/chat.styles'; 
 
-const API_URL = 'http://192.168.1.49:3000'; // Pastikan IP Address ini benar
+const API_URL = 'http://192.168.1.49:3000'; 
 
 export default function ChatPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  // Ambil semua params yang dibutuhkan dari navigasi
   const { id: trainerId, name, profile_picture_url, price } = params;
 
   const [messages, setMessages] = useState([]);
@@ -96,7 +95,6 @@ export default function ChatPage() {
         style={styles.container}
       >
         <View style={styles.header}>
-          {/* Grupkan backButton, image, dan name */}
           <View style={styles.headerInfo}> 
             <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
               <Ionicons name="arrow-back" size={24} color="#333" />

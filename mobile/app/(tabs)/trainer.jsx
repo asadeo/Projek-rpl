@@ -41,19 +41,17 @@ const TrainerCard = ({ trainer, router }) => {
 export default function TrainerPage() {
   const [trainers, setTrainers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [userRole, setUserRole] = useState(null); // State baru untuk role
+  const [userRole, setUserRole] = useState(null);
   const router = useRouter();
 
-  // useFocusEffect akan berjalan setiap kali layar ini dibuka
   useFocusEffect(
     React.useCallback(() => {
       const fetchData = async () => {
         setLoading(true);
         try {
-          // Mengambil role dan token secara bersamaan
           const token = await AsyncStorage.getItem('token');
           const role = await AsyncStorage.getItem('role');
-          setUserRole(role); // Set role pengguna
+          setUserRole(role); 
 
           if (!token) {
             router.replace('/(auth)/sign-in');
@@ -94,7 +92,7 @@ export default function TrainerPage() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* --- PENAMBAHAN TOMBOL TRAINER TOOLS --- */}
+      {/* --- TOMBOL TRAINER TOOLS --- */}
       {userRole === 'trainer' && (
         <View style={styles.toolsContainer}>
           <TouchableOpacity 
